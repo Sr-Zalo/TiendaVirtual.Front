@@ -1,0 +1,42 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docview
+
+# Build
+bin/
+obj/
+out/
+
+# .NET
+*.dll
+*.exe
+*.pdb
+*.cache
+*.log
+
+# Publicación base de datos
+*.dacpac
+*.publish.xml
+
+# Variables de entorno y configuración local
+appsettings.Development.json
+appsettings.Local.json
+*.env
+.env
+
+# Node / Angular
+node_modules/
+dist/
+.angular/
+.npm/
+
+# Docker
+docker-compose.override.yml
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini

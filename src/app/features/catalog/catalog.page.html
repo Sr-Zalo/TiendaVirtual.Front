@@ -1,0 +1,43 @@
+<div class="max-w-6xl mx-auto px-6 py-10">
+  <h1 class="text-3xl font-bold mb-8 text-[var(--color-primary)]">Catálogo</h1>
+
+  @if (loading) {
+    <div class="text-center py-20 text-gray-400">Cargando productos...</div>
+  }
+
+  @if (error) {
+    <div class="text-center py-20 text-red-500">Error al cargar los productos.</div>
+  }
+
+  @if (!loading && !error) {
+    @if (products.length === 0) {
+      <div class="text-center py-20 text-gray-400">No hay productos disponibles.</div>
+    } @else {
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        @for (product of products; track product.productId) {
+          <div class="bg-white rounded-lg shadow hover:shadow-md transition-shadow overflow-hidden">
+            <div class="bg-gray-100 h-48 flex items-center justify-center text-5xl">
+              🎲
+            </div>
+            <div class="p-4">
+              <span class="text-xs text-[var(--color-accent)] font-semibold uppercase">
+                {{ product.categoryName }}
+              </span>
+              <h3 class="font-bold mt-1 mb-2 text-[var(--color-text)]">{{ product.name }}</h3>
+              <p class="text-sm text-gray-500 mb-3 line-clamp-2">{{ product.description }}</p>
+              <div class="flex items-center justify-between">
+                <span class="text-lg font-bold text-[var(--color-primary)]">
+                  {{ product.price }} €
+                </span>
+                <a [routerLink]="['/product', product.productId]"
+                   class="bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-white px-3 py-1 rounded text-sm transition-colors">
+                  Ver más
+                </a>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>
