@@ -1,0 +1,47 @@
+<div class="max-w-4xl mx-auto px-6 py-10">
+
+  @if (loading) {
+    <div class="text-center py-20 text-gray-400">Cargando pedido...</div>
+  }
+
+  @if (error) {
+    <div class="text-center py-20 text-red-500">Pedido no encontrado.</div>
+  }
+
+  @if (!loading && !error && order) {
+    <a routerLink="/orders"
+       class="text-[var(--color-accent)] hover:underline text-sm mb-6 inline-block">
+      ← Volver a mis pedidos
+    </a>
+
+    <div class="bg-white rounded-lg shadow p-8">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h1 class="text-2xl font-bold text-[var(--color-primary)]">Pedido #{{ order.orderId }}</h1>
+          <p class="text-sm text-gray-500 mt-1">{{ order.orderDate | date:'dd/MM/yyyy HH:mm' }}</p>
+        </div>
+        <span class="px-4 py-2 rounded-full text-sm font-semibold {{ statusColors[order.status] }}">
+          {{ statusLabels[order.status] }}
+        </span>
+      </div>
+
+      <div class="border-t border-gray-100 pt-6">
+        @for (line of order.lines; track line.productId) {
+          <div class="flex items-center justify-between py-3 border-b border-gray-50 last:border-0">
+            <div>
+              <p class="font-semibold text-[var(--color-text)]">{{ line.productName }}</p>
+              <p class="text-sm text-gray-500">{{ line.unitPrice }} € × {{ line.quantity }}</p>
+            </div>
+            <p class="font-bold text-[var(--color-primary)]">{{ line.subtotal }} €</p>
+          </div>
+        }
+      </div>
+
+      <div class="border-t border-gray-200 pt-4 mt-4 flex justify-between items-center">
+        <p class="text-lg font-semibold text-gray-700">Total</p>
+        <p class="text-2xl font-bold text-[var(--color-primary)]">{{ order.total }} €</p>
+      </div>
+    </div>
+  }
+
+</div>

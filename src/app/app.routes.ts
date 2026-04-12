@@ -28,6 +28,36 @@ export const routes: Routes = [
       import('./features/auth/register/register.page').then(m => m.RegisterPage)
   },
   {
+    path: 'cart',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/cart/cart.page').then(m => m.CartPage)
+  },
+  {
+    path: 'orders',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/orders/order-list.page').then(m => m.OrderListPage)
+  },
+  {
+    path: 'orders/:id',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/orders/order-detail.page').then(m => m.OrderDetailPage)
+  },
+  {
+    path: 'admin/product/new',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/admin/product-form/product-form.page').then(m => m.ProductFormPage)
+  },
+  {
+    path: 'admin/product/:id',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/admin/product-form/product-form.page').then(m => m.ProductFormPage)
+  },
+  {
     path: '**',
     redirectTo: ''
   }

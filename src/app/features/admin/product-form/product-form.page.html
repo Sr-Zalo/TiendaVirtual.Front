@@ -1,0 +1,227 @@
+<div class="max-w-2xl mx-auto px-6 py-10">
+  <h1 class="text-3xl font-bold mb-8 text-[var(--color-primary)]">
+    {{ isEdit ? 'Editar producto' : 'Nuevo producto' }}
+  </h1>
+
+  @if (error) {
+    <div class="bg-red-50 text-red-600 text-sm px-4 py-3 rounded mb-4">{{ error }}</div>
+  }
+
+  <div class="bg-white rounded-lg shadow p-8 flex flex-col gap-4">
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
+      <select [(ngModel)]="form.categoryId"
+              class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]">
+        <option value="0" disabled>Selecciona una categoría</option>
+        @for (cat of categories; track cat.categoryId) {
+          <option [value]="cat.categoryId">{{ cat.name }}</option>
+        }
+      </select>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+      <input type="text" [(ngModel)]="form.name"
+             class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]"
+             placeholder="Nombre del producto" />
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+      <textarea [(ngModel)]="form.description" rows="3"
+                class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]"
+                placeholder="Descripción del producto"></textarea>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Precio (€)</label>
+        <input type="number" [(ngModel)]="form.price" min="0" step="0.01"
+               class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Stock</label>
+        <input type="number" [(ngModel)]="form.stock" min="0"
+               class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]" />
+      </div>
+    </div>
+
+    @if (isBoardGame) {
+      <hr class="border-gray-200" />
+      <p class="text-sm font-semibold text-gray-600">Datos del juego de mesa</p>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Jugadores mín.</label>
+          <input type="number" [(ngModel)]="form.minPlayers" min="1"
+                 class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Jugadores máx.</label>
+          <input type="number" [(ngModel)]="form.maxPlayers" min="1"
+                 class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Duración media (min)</label>
+          <input type="number" [(ngModel)]="form.avgDuration" min="0"
+                 class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Edad mínima</label>
+          <input type="number" [(ngModel)]="form.minAge" min="0"
+                 class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]" />
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Tipo</label>
+        <input type="text" [(ngModel)]="form.type"
+               class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]"
+               placeholder="Estrategia, cooperativo, familiar..." />
+      </div>
+    }
+
+    @if (isVideoGame) {
+      <hr class="border-gray-200" />
+      <p class="text-sm font-semibold text-gray-600">Datos del videojuego</p>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Plataforma</label>
+        <input type="text" [(ngModel)]="form.platform"
+               class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]"
+               placeholder="PS5, Xbox, PC..." />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Desarrollador</label>
+        <input type="text" [(ngModel)]="form.developer"
+               class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">PEGI</label>
+        <input type="number" [(ngModel)]="form.pegi" min="0"
+               class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]" />
+      </div>
+    }
+
+    @if (isBook) {
+      <hr class="border-gray-200" />
+      <p class="text-sm font-semibold text-gray-600">Datos del libro</p>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Autor</label>
+          <input type="text" [(ngModel)]="form.author"
+                 class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Editorial</label>
+          <input type="text" [(ngModel)]="form.publisher"
+                 class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">ISBN</label>
+          <input type="text" [(ngModel)]="form.isbn"
+                 class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Páginas</label>
+          <input type="number" [(ngModel)]="form.pages" min="0"
+                 class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]" />
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Idioma</label>
+        <input type="text" [(ngModel)]="form.language"
+               class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]"
+               placeholder="Español, Inglés..." />
+      </div>
+    }
+
+    @if (isCollectible) {
+      <hr class="border-gray-200" />
+      <p class="text-sm font-semibold text-gray-600">Datos del coleccionable</p>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Tipo</label>
+          <input type="text" [(ngModel)]="form.collectibleType"
+                 class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]"
+                 placeholder="Figura, póster, réplica..." />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Material</label>
+          <input type="text" [(ngModel)]="form.material"
+                 class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Talla / Tamaño</label>
+          <input type="text" [(ngModel)]="form.size"
+                 class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Referencia</label>
+          <input type="text" [(ngModel)]="form.reference"
+                 class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]"
+                 placeholder="Serie, película, libro..." />
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <input type="checkbox" [(ngModel)]="form.limitedEdition" id="limitedEdition" />
+        <label for="limitedEdition" class="text-sm font-medium text-gray-700">Edición limitada</label>
+      </div>
+    }
+
+    @if (isPuzzle) {
+      <hr class="border-gray-200" />
+      <p class="text-sm font-semibold text-gray-600">Datos del puzzle</p>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Número de piezas</label>
+          <input type="number" [(ngModel)]="form.pieces" min="0"
+                 class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Dificultad</label>
+          <input type="text" [(ngModel)]="form.difficulty"
+                 class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]"
+                 placeholder="Fácil, media, difícil..." />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Forma</label>
+          <input type="text" [(ngModel)]="form.shape"
+                 class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]"
+                 placeholder="Rectangular, 3D..." />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Material</label>
+          <input type="text" [(ngModel)]="form.material"
+                 class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Edad mínima</label>
+          <input type="number" [(ngModel)]="form.minAge" min="0"
+                 class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Creador</label>
+          <input type="text" [(ngModel)]="form.creator"
+                 class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]" />
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Dimensiones</label>
+        <input type="text" [(ngModel)]="form.dimensions"
+               class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[var(--color-accent)]"
+               placeholder="50x70cm, 30x30x30cm..." />
+      </div>
+    }
+
+    <div class="flex gap-4 pt-4">
+      <button (click)="submit()" [disabled]="loading || form.categoryId === 0"
+              class="flex-1 bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-white py-3 rounded-lg font-semibold transition-colors disabled:opacity-50">
+        {{ loading ? 'Guardando...' : isEdit ? 'Guardar cambios' : 'Crear producto' }}
+      </button>
+      <a routerLink="/catalog"
+         class="px-6 py-3 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors text-center">
+        Cancelar
+      </a>
+    </div>
+
+  </div>
+</div>

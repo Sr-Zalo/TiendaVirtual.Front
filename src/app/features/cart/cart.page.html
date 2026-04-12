@@ -1,0 +1,55 @@
+<div class="max-w-4xl mx-auto px-6 py-10">
+  <h1 class="text-3xl font-bold mb-8 text-[var(--color-primary)]">Mi carrito</h1>
+
+  @if (loading) {
+    <div class="text-center py-20 text-gray-400">Cargando carrito...</div>
+  }
+
+  @if (!loading) {
+    @if (items.length === 0) {
+      <div class="text-center py-20">
+        <p class="text-gray-400 text-lg mb-4">Tu carrito está vacío</p>
+        <a routerLink="/catalog"
+           class="bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-white px-6 py-3 rounded-lg transition-colors">
+          Ver catálogo
+        </a>
+      </div>
+    } @else {
+      <div class="bg-white rounded-lg shadow overflow-hidden mb-6">
+        @for (item of items; track item.cartId) {
+          <div class="flex items-center gap-4 p-4 border-b border-gray-100 last:border-0">
+            <div class="bg-gray-100 rounded w-16 h-16 flex items-center justify-center text-2xl flex-shrink-0">
+              🎲
+            </div>
+            <div class="flex-1">
+              <h3 class="font-semibold text-[var(--color-text)]">{{ item.productName }}</h3>
+              <p class="text-sm text-gray-500">{{ item.price }} € × {{ item.quantity }}</p>
+            </div>
+            <div class="text-right">
+              <p class="font-bold text-[var(--color-primary)]">{{ item.subtotal }} €</p>
+              <button (click)="removeItem(item.cartId)"
+                      class="text-red-400 hover:text-red-600 text-sm transition-colors mt-1">
+                Eliminar
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+
+      @if (error) {
+        <div class="bg-red-50 text-red-600 text-sm px-4 py-3 rounded mb-4">{{ error }}</div>
+      }
+
+      <div class="bg-white rounded-lg shadow p-6 flex items-center justify-between">
+        <div>
+          <p class="text-gray-500 text-sm">Total</p>
+          <p class="text-2xl font-bold text-[var(--color-primary)]">{{ total }} €</p>
+        </div>
+        <button (click)="checkout()" [disabled]="checkingOut"
+                class="bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-white px-8 py-3 rounded-lg font-semibold transition-colors disabled:opacity-50">
+          {{ checkingOut ? 'Procesando...' : 'Finalizar compra' }}
+        </button>
+      </div>
+    }
+  }
+</div>
