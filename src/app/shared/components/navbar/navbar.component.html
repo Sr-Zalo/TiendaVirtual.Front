@@ -9,56 +9,55 @@
 
     <!-- Barra de búsqueda -->
     <div class="flex-1 max-w-2xl mx-auto">
-      <div class="flex items-center border border-[var(--color-border)] rounded-full px-5 py-3 bg-white focus-within:border-[var(--color-primary)] transition-colors">
+      <div
+        class="flex items-center border border-[var(--color-border)] rounded-full px-5 py-3 bg-white focus-within:border-[var(--color-primary)] transition-colors">
         <ph-magnifying-glass size="20" color="#9CA3AF" class="mr-3 flex-shrink-0"></ph-magnifying-glass>
-        <input
-          type="text"
-          [(ngModel)]="searchQuery"
-          (keyup.enter)="search()"
+        <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="search()"
           placeholder="Buscar juegos, libros, coleccionables..."
-          class="flex-1 outline-none text-base bg-transparent text-[var(--color-text)] placeholder-gray-400"
-        />
+          class="flex-1 outline-none text-base bg-transparent text-[var(--color-text)] placeholder-gray-400" />
       </div>
     </div>
 
     <!-- Acciones derecha -->
     <div class="flex items-center gap-5 flex-shrink-0">
       @if (authService.isLoggedIn()) {
-        <a routerLink="/cart" class="flex items-center gap-2 text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors relative">
-          <ph-shopping-cart size="28"></ph-shopping-cart>
-          <span class="text-base font-medium">Carrito</span>
-          @if (cartCount > 0) {
-            <span class="absolute -top-2 -right-2 bg-[var(--color-primary)] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
-              {{ cartCount }}
-            </span>
-          }
-        </a>
-        <a routerLink="/orders"
-           class="text-base text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors">
-          Mis pedidos
-        </a>
-        @if (authService.isAdmin()) {
-          <a routerLink="/admin/product/new"
-             class="text-base text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] transition-colors font-medium">
-            + Producto
-          </a>
+      <a routerLink="/cart"
+        class="flex items-center gap-2 text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors relative">
+        <ph-shopping-cart size="28"></ph-shopping-cart>
+        <span class="text-base font-medium">Carrito</span>
+        @if (cartCount > 0) {
+        <span
+          class="absolute -top-2 -right-2 bg-[var(--color-primary)] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+          {{ cartCount }}
+        </span>
         }
-        <button (click)="logout()"
-                class="flex items-center gap-2 bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white px-5 py-2.5 rounded-full text-base font-medium transition-colors">
-          <ph-user size="20" color="white"></ph-user>
-          {{ authService.currentUser()?.name }}
-        </button>
+      </a>
+      <a routerLink="/orders"
+        class="text-base text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors">
+        Mis pedidos
+      </a>
+      @if (authService.isAdmin()) {
+      <a routerLink="/admin/product/new"
+        class="text-base text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] transition-colors font-medium">
+        + Producto
+      </a>
+      }
+      <button (click)="logout()"
+        class="flex items-center gap-2 bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white px-5 py-2.5 rounded-full text-base font-medium transition-colors">
+        <ph-user size="20" color="white"></ph-user>
+        {{ authService.currentUser()?.name }}
+      </button>
       } @else {
-        <button (click)="openCart()"
-                class="flex items-center gap-2 text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors">
-          <ph-shopping-cart size="28"></ph-shopping-cart>
-          <span class="text-base font-medium">Carrito</span>
-        </button>
-        <button (click)="openLogin()"
-                class="flex items-center gap-2 bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white px-5 py-2.5 rounded-full text-base font-medium transition-colors">
-          <ph-user size="20" color="white"></ph-user>
-          Iniciar sesión
-        </button>
+      <button (click)="openCart()"
+        class="flex items-center gap-2 text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors">
+        <ph-shopping-cart size="28"></ph-shopping-cart>
+        <span class="text-base font-medium">Carrito</span>
+      </button>
+      <button (click)="openLogin()"
+        class="flex items-center gap-2 bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white px-5 py-2.5 rounded-full text-base font-medium transition-colors">
+        <ph-user size="20" color="white"></ph-user>
+        Iniciar sesión
+      </button>
       }
     </div>
   </div>
@@ -67,10 +66,10 @@
   <div class="bg-[var(--color-navbar-secondary)]">
     <nav class="max-w-7xl mx-auto px-8 flex items-center justify-center gap-10">
       @for (link of navLinks; track link.label) {
-        <a [routerLink]="link.path"
-           class="text-gray-300 hover:text-white text-xs font-semibold tracking-widest py-4 border-b-2 border-transparent hover:border-white transition-colors whitespace-nowrap">
-          {{ link.label }}
-        </a>
+      <a [routerLink]="link.path" [queryParams]="link.query"
+        class="text-gray-300 hover:text-white text-xs font-semibold tracking-widest py-4 border-b-2 border-transparent hover:border-white transition-colors whitespace-nowrap">
+        {{ link.label }}
+      </a>
       }
     </nav>
   </div>

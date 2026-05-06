@@ -58,4 +58,8 @@ export interface ProductFilterParams {
   limitedEdition?: boolean;
   pieces?: number;
   difficulty?: string;
+  searchText?: string;
+  outOfStock?: boolean;
+  newArrivals?: boolean;
+  bestSellers?: boolean;
 }

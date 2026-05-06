@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, ChangeDetectorRef, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../core/services/product.service';
 import { CartService } from '../../core/services/cart.service';
@@ -10,7 +10,6 @@ import { CategoryService } from '../../core/services/category.service';
 import { AdminProductService } from '../../core/services/admin-product.service';
 import { Product, ProductFilterParams } from '../../core/models/product.model';
 import { Category } from '../../core/models/category.model';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-catalog',
@@ -26,6 +25,7 @@ export class CatalogPage implements OnInit {
   private authModalService = inject(AuthModalService);
   private categoryService = inject(CategoryService);
   private adminProductService = inject(AdminProductService);
+  private activatedRoute = inject(ActivatedRoute);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
 
@@ -41,8 +41,24 @@ export class CatalogPage implements OnInit {
   cartError = '';
 
   filters: ProductFilterParams = {};
+  currentFilter = '';
+
+  currentPage = 1;
+  pageSize = 15;
+
+  readonly filterLabels: Record<string, string> = {
+    'new': 'Novedades',
+    'soon': 'Próximamente',
+    'best': 'Más vendidos',
+    'recommended': 'Recomendados'
+  };
 
   get isAdmin() { return this.authService.isAdmin(); }
+  get isBoardGame() { return this.selectedCategoryName === 'Juego de mesa'; }
+  get isVideoGame() { return this.selectedCategoryName === 'Videojuego'; }
+  get isBook() { return this.selectedCategoryName === 'Libro'; }
+  get isCollectible() { return this.selectedCategoryName === 'Coleccionable'; }
+  get isPuzzle() { return this.selectedCategoryName === 'Puzzle'; }
 
   ngOnInit() {
     this.categoryService.getAll().subscribe({
@@ -51,7 +67,27 @@ export class CatalogPage implements OnInit {
         this.cdr.detectChanges();
       }
     });
-    this.loadProducts();
+
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.filters = {};
+      this.selectedCategoryId = null;
+      this.selectedCategoryName = '';
+      this.currentFilter = params['filter'] ?? '';
+
+      if (params['q']) {
+        this.filters.searchText = params['q'];
+      }
+
+      if (params['filter'] === 'new') {
+        this.filters.newArrivals = true;
+      } else if (params['filter'] === 'soon') {
+        this.filters.outOfStock = true;
+      } else if (params['filter'] === 'best') {
+        this.filters.bestSellers = true;
+      }
+
+      this.loadProducts();
+    });
   }
 
   loadProducts() {
@@ -66,6 +102,7 @@ export class CatalogPage implements OnInit {
     this.productService.getFiltered(params).subscribe({
       next: data => {
         this.products = data;
+        this.currentPage = 1;
         this.loading = false;
         this.cdr.detectChanges();
       },
@@ -80,7 +117,11 @@ export class CatalogPage implements OnInit {
   selectCategory(categoryId: number | null, categoryName: string) {
     this.selectedCategoryId = categoryId;
     this.selectedCategoryName = categoryName;
-    this.filters = {};
+    this.filters = {
+      newArrivals: this.currentFilter === 'new' ? true : undefined,
+      outOfStock: this.currentFilter === 'soon' ? true : undefined,
+      bestSellers: this.currentFilter === 'best' ? true : undefined,
+    };
     this.loadProducts();
   }
 
@@ -90,14 +131,16 @@ export class CatalogPage implements OnInit {
 
   resetFilters() {
     this.filters = {};
+    if (this.currentFilter === 'new') this.filters.newArrivals = true;
+    if (this.currentFilter === 'soon') this.filters.outOfStock = true;
+    if (this.currentFilter === 'best') this.filters.bestSellers = true;
     this.loadProducts();
   }
 
-  get isBoardGame() { return this.selectedCategoryName === 'Juego de mesa'; }
-  get isVideoGame() { return this.selectedCategoryName === 'Videojuego'; }
-  get isBook() { return this.selectedCategoryName === 'Libro'; }
-  get isCollectible() { return this.selectedCategoryName === 'Coleccionable'; }
-  get isPuzzle() { return this.selectedCategoryName === 'Puzzle'; }
+  clearSearch() {
+    this.filters.searchText = undefined;
+    this.router.navigate(['/catalog']);
+  }
 
   openConfirm(product: Product) {
     if (!this.authService.isLoggedIn()) {
@@ -141,5 +184,25 @@ export class CatalogPage implements OnInit {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.products.length / this.pageSize);
+  }
+
+  get paginatedProducts(): Product[] {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.products.slice(start, start + this.pageSize);
+  }
+
+  get pages(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
+
+  goToPage(page: number) {
+    if (page < 1 || page > this.totalPages) return;
+    this.currentPage = page;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    this.cdr.detectChanges();
   }
 }

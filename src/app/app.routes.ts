@@ -13,6 +13,26 @@ export const routes: Routes = [
       import('./features/catalog/catalog.page').then(m => m.CatalogPage)
   },
   {
+    path: 'novedades',
+    loadComponent: () =>
+      import('./features/novedades/novedades.page').then(m => m.NovedadesPage)
+  },
+  {
+    path: 'proximamente',
+    loadComponent: () =>
+      import('./features/proximamente/proximamente.page').then(m => m.ProximamentePage)
+  },
+  {
+    path: 'promociones',
+    loadComponent: () =>
+      import('./features/promociones/promociones.page').then(m => m.PromocionesPage)
+  },
+  {
+    path: 'recomendados',
+    loadComponent: () =>
+      import('./features/recomendados/recomendados.page').then(m => m.RecomendadosPage)
+  },
+  {
     path: 'product/:id',
     loadComponent: () =>
       import('./features/product-detail/product-detail.page').then(m => m.ProductDetailPage)

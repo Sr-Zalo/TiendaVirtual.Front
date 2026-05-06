@@ -24,12 +24,11 @@ export class NavbarComponent implements OnInit {
   searchQuery = '';
 
   readonly navLinks = [
-    { label: 'NOVEDADES', path: '/catalog?filter=new' },
-    { label: 'PRÓXIMAMENTE', path: '/catalog?filter=soon' },
-    { label: 'PROMOCIONES', path: '/catalog?filter=promo' },
-    { label: 'SEGUNDA MANO', path: '/catalog?filter=secondhand' },
-    { label: 'RECOMENDADOS', path: '/catalog?filter=recommended' },
-    { label: 'CATÁLOGO', path: '/catalog' },
+    { label: 'NOVEDADES', path: '/novedades', query: {} },
+    { label: 'PRÓXIMAMENTE', path: '/proximamente', query: {} },
+    { label: 'PROMOCIONES', path: '/promociones', query: {} },
+    { label: 'RECOMENDADOS', path: '/recomendados', query: {} },
+    { label: 'CATÁLOGO', path: '/catalog', query: {} },
   ];
 
   ngOnInit() {
