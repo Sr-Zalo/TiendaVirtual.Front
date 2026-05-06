@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { Order } from '../models/order.model';
+import { throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class OrderService {
@@ -19,6 +22,11 @@ export class OrderService {
   }
 
   checkout() {
-    return this.api.post<Order>('order/checkout', {});
+    return this.api.post<Order>('order/checkout', {}).pipe(
+      catchError((err: HttpErrorResponse) => {
+        const message = typeof err.error === 'string' ? err.error : 'Error al procesar el pedido';
+        return throwError(() => new Error(message));
+      })
+    );
   }
 }

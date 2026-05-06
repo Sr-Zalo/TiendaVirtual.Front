@@ -1,13 +1,83 @@
 <!doctype html>
 <html lang="es">
+
 <head>
+  <script type="module">
+    import {
+      PhMagnifyingGlass,
+      PhShoppingCart,
+      PhUser,
+      PhSignOut,
+      PhStar,
+      PhFire,
+      PhTrendUp,
+      PhCaretLeft,
+      PhCaretRight,
+      PhGameController,
+      PhTelevisionSimple,
+      PhBookOpen,
+      PhPuzzlePiece,
+      PhTag,
+      PhFunnel,
+      PhX,
+      PhArrowLeft,
+      PhTrash,
+      PhUsers,
+      PhClock,
+      PhGlobe,
+      PhDevices,
+      PhBook,
+      PhPackage,
+      PhCheck,
+      PhPencil,
+      PhSparkle
+    } from '@phosphor-icons/webcomponents';
+
+    const icons = {
+      'ph-magnifying-glass': PhMagnifyingGlass,
+      'ph-shopping-cart': PhShoppingCart,
+      'ph-user': PhUser,
+      'ph-sign-out': PhSignOut,
+      'ph-star': PhStar,
+      'ph-fire': PhFire,
+      'ph-trend-up': PhTrendUp,
+      'ph-caret-left': PhCaretLeft,
+      'ph-caret-right': PhCaretRight,
+      'ph-game-controller': PhGameController,
+      'ph-television-simple': PhTelevisionSimple,
+      'ph-book-open': PhBookOpen,
+      'ph-puzzle-piece': PhPuzzlePiece,
+      'ph-tag': PhTag,
+      'ph-funnel': PhFunnel,
+      'ph-x': PhX,
+      'ph-arrow-left': PhArrowLeft,
+      'ph-trash': PhTrash,
+      'ph-users': PhUsers,
+      'ph-clock': PhClock,
+      'ph-globe': PhGlobe,
+      'ph-devices': PhDevices,
+      'ph-book': PhBook,
+      'ph-package': PhPackage,
+      'ph-check': PhCheck,
+      'ph-pencil': PhPencil,
+      'ph-sparkle': PhSparkle
+    };
+
+    for (const [name, constructor] of Object.entries(icons)) {
+      if (!customElements.get(name)) {
+        customElements.define(name, constructor);
+      }
+    }
+  </script>
   <meta charset="utf-8">
-  <title>Gestor Hermandad</title>
+  <title>PlayVault</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/x-icon" href="dado.ico">
 </head>
+
 <body>
   <app-root></app-root>
 </body>
+
 </html>

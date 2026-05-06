@@ -1,22 +1,36 @@
-import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
 import { CartService } from '../../../core/services/cart.service';
+import { AuthModalService } from '../../../core/services/auth-modal.service';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './navbar.component.html'
+  imports: [CommonModule, RouterModule, FormsModule],
+  templateUrl: './navbar.component.html',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class NavbarComponent implements OnInit {
   authService = inject(AuthService);
   private cartService = inject(CartService);
+  private authModalService = inject(AuthModalService);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
 
   cartCount = 0;
+  searchQuery = '';
+
+  readonly navLinks = [
+    { label: 'NOVEDADES', path: '/catalog?filter=new' },
+    { label: 'PRÓXIMAMENTE', path: '/catalog?filter=soon' },
+    { label: 'PROMOCIONES', path: '/catalog?filter=promo' },
+    { label: 'SEGUNDA MANO', path: '/catalog?filter=secondhand' },
+    { label: 'RECOMENDADOS', path: '/catalog?filter=recommended' },
+    { label: 'CATÁLOGO', path: '/catalog' },
+  ];
 
   ngOnInit() {
     if (this.authService.isLoggedIn()) {
@@ -34,7 +48,26 @@ export class NavbarComponent implements OnInit {
     });
   }
 
+  search() {
+    if (this.searchQuery.trim()) {
+      this.router.navigate(['/catalog'], { queryParams: { q: this.searchQuery } });
+    }
+  }
+
+  openLogin() {
+    this.authModalService.openLogin();
+  }
+
+  openCart() {
+    if (!this.authService.isLoggedIn()) {
+      this.authModalService.openLogin();
+      return;
+    }
+    this.router.navigate(['/cart']);
+  }
+
   logout() {
+    if (!confirm('¿Seguro que quieres cerrar sesión?')) return;
     this.authService.logout();
     this.cartCount = 0;
     this.router.navigate(['/']);

@@ -1,43 +1,339 @@
-<div class="max-w-6xl mx-auto px-6 py-10">
-  <h1 class="text-3xl font-bold mb-8 text-[var(--color-primary)]">Catálogo</h1>
+<div class="min-h-screen bg-[var(--color-bg)]">
 
-  @if (loading) {
-    <div class="text-center py-20 text-gray-400">Cargando productos...</div>
-  }
+  <!-- Cabecera del catálogo -->
+  <div class="max-w-7xl mx-auto px-8 pt-10 pb-6">
+    <h1 class="text-4xl font-bold text-[var(--color-text)] mb-8">Catálogo Completo</h1>
 
-  @if (error) {
-    <div class="text-center py-20 text-red-500">Error al cargar los productos.</div>
-  }
+    <!-- Botones de categoría -->
+    <div class="flex items-center gap-3 flex-wrap">
+      <button (click)="selectCategory(null, '')"
+              class="flex items-center gap-2 px-5 py-2.5 rounded-full border text-sm font-medium transition-colors"
+              [class.bg-[var(--color-primary)]]="selectedCategoryId === null"
+              [class.text-white]="selectedCategoryId === null"
+              [class.border-[var(--color-primary)]]="selectedCategoryId === null"
+              [class.border-[var(--color-border)]]="selectedCategoryId !== null"
+              [class.text-[var(--color-text)]]="selectedCategoryId !== null"
+              [class.bg-white]="selectedCategoryId !== null">
+        Todos
+      </button>
+      @for (cat of categories; track cat.categoryId) {
+        <button (click)="selectCategory(cat.categoryId, cat.name)"
+                class="flex items-center gap-2 px-5 py-2.5 rounded-full border text-sm font-medium transition-colors"
+                [class.bg-[var(--color-primary)]]="selectedCategoryId === cat.categoryId"
+                [class.text-white]="selectedCategoryId === cat.categoryId"
+                [class.border-[var(--color-primary)]]="selectedCategoryId === cat.categoryId"
+                [class.border-[var(--color-border)]]="selectedCategoryId !== cat.categoryId"
+                [class.text-[var(--color-text)]]="selectedCategoryId !== cat.categoryId"
+                [class.bg-white]="selectedCategoryId !== cat.categoryId">
+          @if (cat.name === 'Puzzle') { <ph-puzzle-piece size="16"></ph-puzzle-piece> }
+          @if (cat.name === 'Juego de mesa') { <ph-game-controller size="16"></ph-game-controller> }
+          @if (cat.name === 'Videojuego') { <ph-television-simple size="16"></ph-television-simple> }
+          @if (cat.name === 'Coleccionable') { <ph-star size="16"></ph-star> }
+          @if (cat.name === 'Libro') { <ph-book-open size="16"></ph-book-open> }
+          {{ cat.name }}
+        </button>
+      }
+    </div>
+  </div>
 
-  @if (!loading && !error) {
-    @if (products.length === 0) {
-      <div class="text-center py-20 text-gray-400">No hay productos disponibles.</div>
-    } @else {
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        @for (product of products; track product.productId) {
-          <div class="bg-white rounded-lg shadow hover:shadow-md transition-shadow overflow-hidden">
-            <div class="bg-gray-100 h-48 flex items-center justify-center text-5xl">
-              🎲
-            </div>
-            <div class="p-4">
-              <span class="text-xs text-[var(--color-accent)] font-semibold uppercase">
-                {{ product.categoryName }}
-              </span>
-              <h3 class="font-bold mt-1 mb-2 text-[var(--color-text)]">{{ product.name }}</h3>
-              <p class="text-sm text-gray-500 mb-3 line-clamp-2">{{ product.description }}</p>
-              <div class="flex items-center justify-between">
-                <span class="text-lg font-bold text-[var(--color-primary)]">
-                  {{ product.price }} €
-                </span>
-                <a [routerLink]="['/product', product.productId]"
-                   class="bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-white px-3 py-1 rounded text-sm transition-colors">
-                  Ver más
-                </a>
-              </div>
-            </div>
+  <!-- Layout principal -->
+  <div class="max-w-7xl mx-auto px-8 pb-16 flex gap-8 items-start">
+
+    <!-- Panel de filtros -->
+    <aside class="w-64 flex-shrink-0 bg-white rounded-2xl shadow-sm p-6 sticky top-32">
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-2">
+          <ph-funnel size="20" color="var(--color-primary)"></ph-funnel>
+          <h2 class="text-base font-bold text-[var(--color-text)]">Filtros</h2>
+        </div>
+        <button (click)="resetFilters()"
+                class="text-xs text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors">
+          Limpiar
+        </button>
+      </div>
+
+      <div class="flex flex-col gap-5">
+
+        <!-- Precio -->
+        <div>
+          <label class="block text-sm font-medium text-[var(--color-text)] mb-2">Precio</label>
+          <div class="flex gap-2">
+            <input type="number" [(ngModel)]="filters.minPrice" placeholder="Mín"
+                   class="w-full border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-primary)]" />
+            <input type="number" [(ngModel)]="filters.maxPrice" placeholder="Máx"
+                   class="w-full border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-primary)]" />
+          </div>
+        </div>
+
+        <!-- Filtros Juego de mesa -->
+        @if (isBoardGame) {
+          <div>
+            <label class="block text-sm font-medium text-[var(--color-text)] mb-2">Número de jugadores</label>
+            <select [(ngModel)]="filters.minPlayers"
+                    class="w-full border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-primary)]">
+              <option [ngValue]="undefined">Cualquier número</option>
+              <option [ngValue]="1">1 jugador</option>
+              <option [ngValue]="2">2 jugadores</option>
+              <option [ngValue]="3">3 jugadores</option>
+              <option [ngValue]="4">4 jugadores</option>
+              <option [ngValue]="5">5 o más</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-[var(--color-text)] mb-2">Duración media</label>
+            <select [(ngModel)]="filters.avgDuration"
+                    class="w-full border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-primary)]">
+              <option [ngValue]="undefined">Cualquier duración</option>
+              <option [ngValue]="30">Hasta 30 min</option>
+              <option [ngValue]="60">Hasta 1 hora</option>
+              <option [ngValue]="120">Hasta 2 horas</option>
+              <option [ngValue]="180">Más de 2 horas</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-[var(--color-text)] mb-2">Edad mínima</label>
+            <select [(ngModel)]="filters.minAge"
+                    class="w-full border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-primary)]">
+              <option [ngValue]="undefined">Todas las edades</option>
+              <option [ngValue]="6">6+</option>
+              <option [ngValue]="8">8+</option>
+              <option [ngValue]="10">10+</option>
+              <option [ngValue]="12">12+</option>
+              <option [ngValue]="14">14+</option>
+              <option [ngValue]="18">18+</option>
+            </select>
           </div>
         }
+
+        <!-- Filtros Videojuego -->
+        @if (isVideoGame) {
+          <div>
+            <label class="block text-sm font-medium text-[var(--color-text)] mb-2">Plataforma</label>
+            <select [(ngModel)]="filters.platform"
+                    class="w-full border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-primary)]">
+              <option value="">Todas las plataformas</option>
+              <option value="PS5">PS5</option>
+              <option value="Xbox">Xbox</option>
+              <option value="PC">PC</option>
+              <option value="Nintendo Switch">Nintendo Switch</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-[var(--color-text)] mb-2">PEGI</label>
+            <select [(ngModel)]="filters.pegi"
+                    class="w-full border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-primary)]">
+              <option [ngValue]="undefined">Todos</option>
+              <option [ngValue]="3">PEGI 3</option>
+              <option [ngValue]="7">PEGI 7</option>
+              <option [ngValue]="12">PEGI 12</option>
+              <option [ngValue]="16">PEGI 16</option>
+              <option [ngValue]="18">PEGI 18</option>
+            </select>
+          </div>
+        }
+
+        <!-- Filtros Libro -->
+        @if (isBook) {
+          <div>
+            <label class="block text-sm font-medium text-[var(--color-text)] mb-2">Idioma</label>
+            <select [(ngModel)]="filters.language"
+                    class="w-full border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-primary)]">
+              <option value="">Todos los idiomas</option>
+              <option value="Español">Español</option>
+              <option value="Inglés">Inglés</option>
+              <option value="Francés">Francés</option>
+              <option value="Alemán">Alemán</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-[var(--color-text)] mb-2">Editorial</label>
+            <input type="text" [(ngModel)]="filters.publisher" placeholder="Nombre editorial"
+                   class="w-full border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-primary)]" />
+          </div>
+        }
+
+        <!-- Filtros Coleccionable -->
+        @if (isCollectible) {
+          <div>
+            <label class="block text-sm font-medium text-[var(--color-text)] mb-2">Tipo</label>
+            <select [(ngModel)]="filters.collectibleType"
+                    class="w-full border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-primary)]">
+              <option value="">Todos los tipos</option>
+              <option value="Figura">Figura</option>
+              <option value="Póster">Póster</option>
+              <option value="Réplica">Réplica</option>
+              <option value="Ropa">Ropa</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </div>
+          <div class="flex items-center gap-2">
+            <input type="checkbox" [(ngModel)]="filters.limitedEdition" id="limitedEdition"
+                   class="w-4 h-4 accent-[var(--color-primary)]" />
+            <label for="limitedEdition" class="text-sm font-medium text-[var(--color-text)]">
+              Solo edición limitada
+            </label>
+          </div>
+        }
+
+        <!-- Filtros Puzzle -->
+        @if (isPuzzle) {
+          <div>
+            <label class="block text-sm font-medium text-[var(--color-text)] mb-2">Número de piezas</label>
+            <select [(ngModel)]="filters.pieces"
+                    class="w-full border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-primary)]">
+              <option [ngValue]="undefined">Cualquier número</option>
+              <option [ngValue]="500">Hasta 500</option>
+              <option [ngValue]="1000">Hasta 1000</option>
+              <option [ngValue]="2000">Hasta 2000</option>
+              <option [ngValue]="5000">Más de 2000</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-[var(--color-text)] mb-2">Dificultad</label>
+            <select [(ngModel)]="filters.difficulty"
+                    class="w-full border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-primary)]">
+              <option value="">Cualquier dificultad</option>
+              <option value="Fácil">Fácil</option>
+              <option value="Media">Media</option>
+              <option value="Difícil">Difícil</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-[var(--color-text)] mb-2">Edad mínima</label>
+            <select [(ngModel)]="filters.minAge"
+                    class="w-full border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-primary)]">
+              <option [ngValue]="undefined">Todas las edades</option>
+              <option [ngValue]="6">6+</option>
+              <option [ngValue]="8">8+</option>
+              <option [ngValue]="10">10+</option>
+              <option [ngValue]="12">12+</option>
+            </select>
+          </div>
+        }
+
+        <button (click)="applyFilters()"
+                class="w-full bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white py-3 rounded-xl font-semibold text-sm transition-colors">
+          Aplicar Filtros
+        </button>
+
       </div>
-    }
-  }
+    </aside>
+
+    <!-- Grid de productos -->
+    <div class="flex-1">
+
+      @if (loading) {
+        <div class="text-center py-20 text-gray-400">Cargando productos...</div>
+      }
+
+      @if (error) {
+        <div class="text-center py-20 text-red-500">Error al cargar los productos.</div>
+      }
+
+      @if (!loading && !error) {
+        @if (products.length === 0) {
+          <div class="text-center py-20 text-gray-400">
+            <p class="text-lg mb-2">No se encontraron productos</p>
+            <p class="text-sm">Prueba a cambiar los filtros</p>
+          </div>
+        } @else {
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            @for (product of products; track product.productId) {
+              <div class="bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition-shadow relative"
+                   [class.opacity-60]="product.stock === 0">
+
+                @if (product.stock === 0 && isAdmin) {
+                  <span class="absolute top-3 left-3 z-10 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
+                    Sin stock
+                  </span>
+                }
+
+                @if (isAdmin) {
+                  <button (click)="deleteProduct(product, $event)"
+                          class="absolute top-3 right-3 z-10 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center transition-colors shadow">
+                    <ph-trash size="16" color="white"></ph-trash>
+                  </button>
+                }
+
+                <a [routerLink]="['/product', product.productId]">
+                  <div class="bg-[var(--color-bg)] h-52 flex items-center justify-center text-gray-400 text-sm">
+                    Imagen del producto
+                  </div>
+                </a>
+
+                <div class="p-5">
+                  <a [routerLink]="['/product', product.productId]"
+                     class="block text-base font-semibold text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors mb-2">
+                    {{ product.name }}
+                  </a>
+                  <p class="text-xl font-bold text-[var(--color-primary)] mb-4">
+                    {{ product.price }} €
+                  </p>
+
+                  @if (isAdmin) {
+                    <div class="flex gap-2">
+                      <a [routerLink]="['/admin/product', product.productId]"
+                         class="flex-1 border border-[var(--color-primary)] text-[var(--color-primary)] py-2 rounded-xl font-semibold text-sm text-center hover:bg-[var(--color-primary-light)] transition-colors">
+                        Editar
+                      </a>
+                      <button (click)="openConfirm(product)"
+                              [disabled]="product.stock === 0"
+                              class="flex-1 bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white py-2 rounded-xl font-semibold text-sm transition-colors disabled:opacity-50">
+                        Añadir
+                      </button>
+                    </div>
+                  } @else {
+                    <button (click)="openConfirm(product)"
+                            [disabled]="product.stock === 0"
+                            class="w-full bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white py-2.5 rounded-xl font-semibold text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                      {{ product.stock === 0 ? 'Sin stock' : 'Añadir al carrito' }}
+                    </button>
+                  }
+                </div>
+
+              </div>
+            }
+          </div>
+        }
+      }
+
+    </div>
+  </div>
+
 </div>
+
+<!-- Modal de confirmación -->
+@if (confirmProduct) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center"
+       style="background: rgba(0,0,0,0.5)">
+    <div class="bg-white rounded-2xl shadow-xl p-8 max-w-sm w-full mx-4">
+      <div class="flex items-start justify-between mb-4">
+        <h3 class="text-lg font-bold text-[var(--color-text)]">Añadir al carrito</h3>
+        <button (click)="closeConfirm()"
+                class="text-gray-400 hover:text-gray-600 transition-colors">
+          <ph-x size="20"></ph-x>
+        </button>
+      </div>
+
+      @if (cartError) {
+        <div class="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl mb-4">
+          {{ cartError }}
+        </div>
+      }
+
+      <p class="text-[var(--color-text-secondary)] mb-6">
+        ¿Añadir <span class="font-semibold text-[var(--color-text)]">{{ confirmProduct.name }}</span> al carrito?
+      </p>
+      <div class="flex gap-3">
+        <button (click)="closeConfirm()"
+                class="flex-1 border border-[var(--color-border)] text-[var(--color-text)] py-2.5 rounded-xl font-semibold text-sm hover:bg-[var(--color-bg)] transition-colors">
+          Cancelar
+        </button>
+        <button (click)="confirmAddToCart()"
+                class="flex-1 bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white py-2.5 rounded-xl font-semibold text-sm transition-colors">
+          Añadir
+        </button>
+      </div>
+    </div>
+  </div>
+}

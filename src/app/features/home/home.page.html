@@ -1,20 +1,121 @@
-<section class="bg-[var(--color-primary)] text-white py-20 px-6 text-center">
-    <h1 class="text-4xl font-bold mb-4">Bienvenido a TiendaVirtual</h1>
-    <p class="text-lg text-gray-300 mb-8">Juegos de mesa, videojuegos, libros y mucho más</p>
-    <a routerLink="/catalog"
-        class="bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] px-8 py-3 rounded-lg text-lg font-semibold transition-colors">
-        Ver catálogo
-    </a>
-</section>
-
-<section class="max-w-5xl mx-auto px-6 py-16">
-    <h2 class="text-2xl font-bold text-center mb-10 text-[var(--color-primary)]">¿Qué encontrarás aquí?</h2>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-        @for (category of categories; track category.name) {
-        <div class="bg-white rounded-lg shadow p-6 text-center hover:shadow-md transition-shadow">
-            <span class="text-4xl">{{ category.icon }}</span>
-            <p class="mt-3 font-semibold text-[var(--color-text)]">{{ category.name }}</p>
+<!-- HERO CARRUSEL -->
+<div class="relative w-full overflow-hidden" style="height: 420px; background: #3a3a3a;">
+  @for (slide of slides; track slide.id; let i = $index) {
+    <div class="absolute inset-0 transition-opacity duration-700 flex items-center px-20"
+         [style.opacity]="i === currentSlide ? '1' : '0'"
+         [style.z-index]="i === currentSlide ? '1' : '0'">
+      <div class="max-w-xl">
+        <h1 class="text-white text-6xl font-bold mb-4">{{ slide.name }}</h1>
+        <p class="text-gray-300 text-xl mb-8">{{ slide.description }}</p>
+        <div class="flex items-center gap-8">
+          <span class="text-white text-4xl font-bold">{{ slide.price }} €</span>
+          <a [routerLink]="['/product', slide.id]"
+             class="bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white px-8 py-3.5 rounded-lg text-lg font-semibold transition-colors">
+            Ver más
+          </a>
         </div>
-        }
+      </div>
     </div>
-</section>
+  }
+
+  <!-- Dots -->
+  <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 z-10">
+    @for (slide of slides; track slide.id; let i = $index) {
+      <button (click)="goToSlide(i)"
+              class="w-3 h-3 rounded-full transition-colors"
+              [style.background]="i === currentSlide ? 'white' : 'rgba(255,255,255,0.4)'">
+      </button>
+    }
+  </div>
+</div>
+
+<!-- SECCIÓN DESTACADOS -->
+<div class="max-w-7xl mx-auto px-8 py-14">
+  <div class="bg-white rounded-2xl shadow-sm p-10">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+
+      <!-- Productos Destacados -->
+      <div>
+        <div class="flex items-center gap-3 mb-4">
+          <ph-star size="24" color="var(--color-primary)" weight="fill"></ph-star>
+          <h2 class="text-xl font-bold text-[var(--color-text)]">Productos Destacados</h2>
+        </div>
+        <div class="w-10 h-0.5 bg-[var(--color-primary)] mb-6"></div>
+        <div class="flex flex-col gap-4">
+          @for (item of featured; track item.id) {
+            <a [routerLink]="['/product', item.id]"
+               class="flex items-center gap-4 hover:bg-[var(--color-bg)] rounded-xl p-2.5 transition-colors">
+              <div class="w-16 h-16 bg-[var(--color-bg)] rounded-xl flex items-center justify-center text-gray-400 text-xs flex-shrink-0">
+                Img
+              </div>
+              <div>
+                <p class="text-sm font-medium text-[var(--color-text)]">{{ item.name }}</p>
+                <p class="text-base font-bold text-[var(--color-primary)]">{{ item.price }} €</p>
+              </div>
+            </a>
+          }
+        </div>
+      </div>
+
+      <!-- Novedades -->
+      <div class="border-x border-[var(--color-border)] px-10">
+        <div class="flex items-center gap-3 mb-4">
+          <ph-sparkle size="24" color="var(--color-primary)" weight="fill"></ph-sparkle>
+          <h2 class="text-xl font-bold text-[var(--color-text)]">Novedades</h2>
+        </div>
+        <div class="w-10 h-0.5 bg-[var(--color-primary)] mb-6"></div>
+        <div class="flex flex-col gap-4">
+          @for (item of newProducts; track item.id) {
+            <a [routerLink]="['/product', item.id]"
+               class="flex items-center gap-4 hover:bg-[var(--color-bg)] rounded-xl p-2.5 transition-colors">
+              <div class="w-16 h-16 bg-[var(--color-bg)] rounded-xl flex items-center justify-center text-gray-400 text-xs flex-shrink-0">
+                Img
+              </div>
+              <div>
+                <p class="text-sm font-medium text-[var(--color-text)]">{{ item.name }}</p>
+                <p class="text-base font-bold text-[var(--color-primary)]">{{ item.price }} €</p>
+              </div>
+            </a>
+          }
+        </div>
+      </div>
+
+      <!-- Más Vendidos -->
+      <div>
+        <div class="flex items-center gap-3 mb-4">
+          <ph-trend-up size="24" color="var(--color-primary)" weight="bold"></ph-trend-up>
+          <h2 class="text-xl font-bold text-[var(--color-text)]">Más Vendidos</h2>
+        </div>
+        <div class="w-10 h-0.5 bg-[var(--color-primary)] mb-6"></div>
+        <div class="flex flex-col gap-4">
+          @for (item of bestsellers; track item.id) {
+            <a [routerLink]="['/product', item.id]"
+               class="flex items-center gap-4 hover:bg-[var(--color-bg)] rounded-xl p-2.5 transition-colors">
+              <div class="relative w-16 h-16 bg-[var(--color-bg)] rounded-xl flex items-center justify-center text-gray-400 text-xs flex-shrink-0">
+                Img
+                <span class="absolute -top-1.5 -right-1.5 bg-[var(--color-text)] text-white text-xs px-1.5 py-0.5 rounded-full font-bold">
+                  TOP {{ item.rank }}
+                </span>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-[var(--color-text)]">{{ item.name }}</p>
+                <p class="text-base font-bold text-[var(--color-primary)]">{{ item.price }} €</p>
+              </div>
+            </a>
+          }
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="bg-[var(--color-navbar-secondary)] py-16 px-6 text-center">
+  <h2 class="text-white text-4xl font-bold mb-3">Explora nuestro catálogo completo</h2>
+  <p class="text-gray-400 text-lg mb-8">Descubre más de 1000 productos para todos los gustos</p>
+  <a routerLink="/catalog"
+     class="inline-block bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white px-10 py-4 rounded-full text-lg font-semibold transition-colors">
+    Ver Catálogo Completo
+  </a>
+</div>

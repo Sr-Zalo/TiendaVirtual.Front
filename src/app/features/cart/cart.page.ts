@@ -1,16 +1,16 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { CartService } from '../../core/services/cart.service';
 import { OrderService } from '../../core/services/order.service';
 import { CartItem } from '../../core/models/cart.model';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './cart.page.html'
+  templateUrl: './cart.page.html',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class CartPage implements OnInit {
   private cartService = inject(CartService);
@@ -27,6 +27,10 @@ export class CartPage implements OnInit {
     return this.items.reduce((acc, item) => acc + item.subtotal, 0);
   }
 
+  get totalItems() {
+    return this.items.reduce((acc, item) => acc + item.quantity, 0);
+  }
+
   ngOnInit() {
     this.loadCart();
   }
@@ -40,6 +44,32 @@ export class CartPage implements OnInit {
       },
       error: () => {
         this.loading = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  increaseQuantity(item: CartItem) {
+    const newQty = item.quantity + 1;
+    this.cartService.updateQuantity(item.cartId, newQty).subscribe({
+      next: () => {
+        item.quantity = newQty;
+        item.subtotal = item.price * newQty;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  decreaseQuantity(item: CartItem) {
+    const newQty = item.quantity - 1;
+    if (newQty <= 0) {
+      this.removeItem(item.cartId);
+      return;
+    }
+    this.cartService.updateQuantity(item.cartId, newQty).subscribe({
+      next: () => {
+        item.quantity = newQty;
+        item.subtotal = item.price * newQty;
         this.cdr.detectChanges();
       }
     });
@@ -66,5 +96,9 @@ export class CartPage implements OnInit {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  goBack() {
+    history.back();
   }
 }
