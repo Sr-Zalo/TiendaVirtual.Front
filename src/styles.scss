@@ -16,8 +16,31 @@
   --radius: 8px;
 }
 
+:root.dark {
+  --color-primary: #7C3AED;
+  --color-primary-hover: #6D28D9;
+  --color-primary-light: #3b1f6e;
+  --color-bg: #1e1e2e;
+  --color-surface: #252535;
+  --color-text: #cdd6f4;
+  --color-text-secondary: #a6adc8;
+  --color-border: #363650;
+  --color-footer: #181825;
+  --color-navbar-secondary: #181825;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
 * {
   box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 button {
@@ -28,9 +51,15 @@ a {
   cursor: pointer;
 }
 
-body {
-  margin: 0;
-  font-family: 'Segoe UI', Roboto, sans-serif;
-  background-color: var(--color-bg);
+input,
+select,
+textarea {
+  background-color: var(--color-surface);
   color: var(--color-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-text-secondary);
 }

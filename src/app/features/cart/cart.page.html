@@ -1,120 +1,101 @@
 <div class="min-h-screen bg-[var(--color-bg)]">
   <div class="max-w-7xl mx-auto px-8 py-10">
 
-    <!-- Volver -->
     <button (click)="goBack()"
-            class="flex items-center gap-2 text-[var(--color-primary)] hover:underline text-sm font-medium mb-6">
+      class="flex items-center gap-2 text-[var(--color-primary)] hover:underline text-sm font-medium mb-6">
       <ph-arrow-left size="18"></ph-arrow-left>
-      Volver
+      {{ 'cart.back' | transloco }}
     </button>
 
-    <h1 class="text-4xl font-bold text-[var(--color-text)] mb-8">Tu Carrito</h1>
+    <h1 class="text-4xl font-bold text-[var(--color-text)] mb-8">{{ 'cart.title' | transloco }}</h1>
 
     @if (loading) {
-      <div class="text-center py-20 text-gray-400">Cargando carrito...</div>
+    <div class="text-center py-20 text-[var(--color-text-secondary)]">{{ 'cart.loading' | transloco }}</div>
     }
 
     @if (!loading) {
-      @if (items.length === 0) {
-        <div class="text-center py-24">
-          <p class="text-[var(--color-text-secondary)] text-lg mb-4">Tu carrito está vacío</p>
-          <a routerLink="/catalog"
-             class="text-[var(--color-primary)] font-semibold hover:underline">
-            Volver al catálogo
-          </a>
-        </div>
-      } @else {
-        <div class="flex gap-8 items-start">
+    @if (items.length === 0) {
+    <div class="text-center py-24">
+      <p class="text-[var(--color-text-secondary)] text-lg mb-4">{{ 'cart.empty' | transloco }}</p>
+      <a routerLink="/catalog" class="text-[var(--color-primary)] font-semibold hover:underline">
+        {{ 'cart.backToCatalog' | transloco }}
+      </a>
+    </div>
+    } @else {
+    <div class="flex gap-8 items-start">
 
-          <!-- Lista de productos -->
-          <div class="flex-1">
-            <div class="bg-white rounded-2xl shadow-sm p-6">
-              <h2 class="text-base font-bold text-[var(--color-text)] mb-5">
-                Productos ({{ totalItems }})
-              </h2>
-
-              <div class="flex flex-col gap-4">
-                @for (item of items; track item.cartId) {
-                  <div class="flex items-center gap-4 bg-[var(--color-bg)] rounded-xl p-4">
-
-                    <!-- Imagen -->
-                    <div class="w-20 h-20 bg-white rounded-xl flex items-center justify-center text-gray-400 text-xs flex-shrink-0 border border-[var(--color-border)]">
-                      Img
-                    </div>
-
-                    <!-- Info -->
-                    <div class="flex-1">
-                      <p class="font-semibold text-[var(--color-text)] mb-1">{{ item.productName }}</p>
-                      <p class="text-lg font-bold text-[var(--color-primary)]">{{ item.price }} €</p>
-                    </div>
-
-                    <!-- Controles cantidad -->
-                    <div class="flex items-center gap-3">
-                      <button (click)="decreaseQuantity(item)"
-                              class="w-9 h-9 rounded-xl border border-[var(--color-border)] bg-white flex items-center justify-center hover:border-[var(--color-primary)] transition-colors text-lg font-bold text-[var(--color-text)]">
-                        −
-                      </button>
-                      <span class="w-8 text-center font-semibold text-[var(--color-text)]">{{ item.quantity }}</span>
-                      <button (click)="increaseQuantity(item)"
-                              class="w-9 h-9 rounded-xl border border-[var(--color-border)] bg-white flex items-center justify-center hover:border-[var(--color-primary)] transition-colors text-lg font-bold text-[var(--color-text)]">
-                        +
-                      </button>
-                    </div>
-
-                    <!-- Eliminar -->
-                    <button (click)="removeItem(item.cartId)"
-                            class="flex items-center gap-1.5 text-sm text-gray-400 hover:text-red-500 transition-colors ml-2">
-                      <ph-trash size="18"></ph-trash>
-                      Eliminar
-                    </button>
-
-                  </div>
-                }
+      <div class="flex-1">
+        <div class="rounded-2xl shadow-sm p-6" style="background: var(--color-surface)">
+          <h2 class="text-base font-bold text-[var(--color-text)] mb-5">
+            {{ 'cart.products' | transloco }} ({{ totalItems }})
+          </h2>
+          <div class="flex flex-col gap-4">
+            @for (item of items; track item.cartId) {
+            <div class="flex items-center gap-4 rounded-xl p-4" style="background: var(--color-bg)">
+              <div
+                class="w-20 h-20 rounded-xl flex items-center justify-center text-[var(--color-text-secondary)] text-xs flex-shrink-0 border border-[var(--color-border)]"
+                style="background: var(--color-surface)">
+                Img
               </div>
+              <div class="flex-1">
+                <p class="font-semibold text-[var(--color-text)] mb-1">{{ item.productName }}</p>
+                <p class="text-lg font-bold text-[var(--color-primary)]">{{ item.price }} €</p>
+              </div>
+              <div class="flex items-center gap-3">
+                <button (click)="decreaseQuantity(item)"
+                  class="w-9 h-9 rounded-xl border border-[var(--color-border)] flex items-center justify-center hover:border-[var(--color-primary)] transition-colors text-lg font-bold text-[var(--color-text)]"
+                  style="background: var(--color-surface)">−</button>
+                <span class="w-8 text-center font-semibold text-[var(--color-text)]">{{ item.quantity }}</span>
+                <button (click)="increaseQuantity(item)"
+                  class="w-9 h-9 rounded-xl border border-[var(--color-border)] flex items-center justify-center hover:border-[var(--color-primary)] transition-colors text-lg font-bold text-[var(--color-text)]"
+                  style="background: var(--color-surface)">+</button>
+              </div>
+              <button (click)="removeItem(item.cartId)"
+                class="flex items-center gap-1.5 text-sm text-[var(--color-text-secondary)] hover:text-red-500 transition-colors ml-2">
+                <ph-trash size="18"></ph-trash>
+                {{ 'cart.delete' | transloco }}
+              </button>
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="w-80 flex-shrink-0">
+        <div class="rounded-2xl shadow-sm p-6" style="background: var(--color-surface)">
+          <h2 class="text-lg font-bold text-[var(--color-text)] mb-6">{{ 'cart.orderSummary' | transloco }}</h2>
+          <div class="flex flex-col gap-3 mb-6">
+            <div class="flex justify-between text-sm text-[var(--color-text-secondary)]">
+              <span>{{ 'cart.subtotal' | transloco }}</span>
+              <span>{{ total }} €</span>
+            </div>
+            <div class="flex justify-between text-sm text-[var(--color-text-secondary)]">
+              <span>{{ 'cart.shipping' | transloco }}</span>
+              <span class="text-[var(--color-text)]">{{ 'cart.free' | transloco }}</span>
+            </div>
+            <div class="border-t border-[var(--color-border)] pt-3 flex justify-between font-bold text-base">
+              <span class="text-[var(--color-text)]">{{ 'cart.total' | transloco }}</span>
+              <span class="text-[var(--color-primary)] text-lg">{{ total }} €</span>
             </div>
           </div>
-
-          <!-- Resumen del pedido -->
-          <div class="w-80 flex-shrink-0">
-            <div class="bg-white rounded-2xl shadow-sm p-6">
-              <h2 class="text-lg font-bold text-[var(--color-text)] mb-6">Resumen del Pedido</h2>
-
-              <div class="flex flex-col gap-3 mb-6">
-                <div class="flex justify-between text-sm text-[var(--color-text-secondary)]">
-                  <span>Subtotal</span>
-                  <span>{{ total }} €</span>
-                </div>
-                <div class="flex justify-between text-sm text-[var(--color-text-secondary)]">
-                  <span>Envío</span>
-                  <span class="text-[var(--color-text)]">Gratis</span>
-                </div>
-                <div class="border-t border-[var(--color-border)] pt-3 flex justify-between font-bold text-base">
-                  <span class="text-[var(--color-text)]">Total</span>
-                  <span class="text-[var(--color-primary)] text-lg">{{ total }} €</span>
-                </div>
-              </div>
-
-              @if (error) {
-                <div class="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl mb-4">{{ error }}</div>
-              }
-
-              <div class="flex flex-col gap-3">
-                <button (click)="checkout()" [disabled]="checkingOut"
-                        class="w-full bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white py-3.5 rounded-xl font-semibold transition-colors disabled:opacity-50">
-                  {{ checkingOut ? 'Procesando...' : 'Proceder al Pago' }}
-                </button>
-                <a routerLink="/catalog"
-                   class="w-full border-2 border-[var(--color-primary)] text-[var(--color-primary)] py-3.5 rounded-xl font-semibold transition-colors hover:bg-[var(--color-primary-light)] text-center">
-                  Seguir Comprando
-                </a>
-              </div>
-
-            </div>
+          @if (error) {
+          <div class="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl mb-4">{{ error }}</div>
+          }
+          <div class="flex flex-col gap-3">
+            <button (click)="checkout()" [disabled]="checkingOut"
+              class="w-full bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white py-3.5 rounded-xl font-semibold transition-colors disabled:opacity-50">
+              {{ checkingOut ? ('cart.processing' | transloco) : ('cart.checkout' | transloco) }}
+            </button>
+            <a routerLink="/catalog"
+              class="w-full border-2 border-[var(--color-primary)] text-[var(--color-primary)] py-3.5 rounded-xl font-semibold transition-colors hover:bg-[var(--color-primary-light)] text-center">
+              {{ 'cart.continueShopping' | transloco }}
+            </a>
           </div>
-
         </div>
-      }
+      </div>
+
+    </div>
     }
-
+    }
   </div>
 </div>

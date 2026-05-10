@@ -1,6 +1,4 @@
 <footer>
-
-  <!-- Footer principal -->
   <div class="bg-[var(--color-footer)] py-12 px-6">
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
 
@@ -10,38 +8,55 @@
           <span style="color: var(--color-primary)">Play</span>Vault
         </p>
         <p class="text-gray-400 text-sm leading-relaxed">
-          Tu tienda de confianza para juegos de mesa, videojuegos, coleccionables y libros.
+          {{ 'footer.tagline' | transloco }}
         </p>
       </div>
 
       <!-- Información -->
       <div>
-        <p class="text-white font-semibold mb-4">Información</p>
+        <p class="text-white font-semibold mb-4">{{ 'footer.info' | transloco }}</p>
         <ul class="flex flex-col gap-2">
-          <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Sobre nosotros</a></li>
-          <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Contacto</a></li>
-          <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Preguntas frecuentes</a></li>
+          <li><a routerLink="/legal" fragment="nosotros"
+              class="text-gray-400 hover:text-white text-sm transition-colors">{{ 'footer.aboutUs' | transloco }}</a>
+          </li>
+          <li><a routerLink="/legal" fragment="contacto"
+              class="text-gray-400 hover:text-white text-sm transition-colors">{{ 'footer.contact' | transloco }}</a>
+          </li>
+          <li><a routerLink="/legal" fragment="faq" class="text-gray-400 hover:text-white text-sm transition-colors">{{
+              'footer.faq' | transloco }}</a></li>
         </ul>
       </div>
 
       <!-- Legal -->
       <div>
-        <p class="text-white font-semibold mb-4">Legal</p>
+        <p class="text-white font-semibold mb-4">{{ 'footer.legal' | transloco }}</p>
         <ul class="flex flex-col gap-2">
-          <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Términos y condiciones</a></li>
-          <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Política de privacidad</a></li>
-          <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Política de cookies</a></li>
-          <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Aviso legal</a></li>
+          <li><a routerLink="/legal" fragment="terminos"
+              class="text-gray-400 hover:text-white text-sm transition-colors">{{ 'footer.terms' | transloco }}</a></li>
+          <li><a routerLink="/legal" fragment="privacidad"
+              class="text-gray-400 hover:text-white text-sm transition-colors">{{ 'footer.privacy' | transloco }}</a>
+          </li>
+          <li><a routerLink="/legal" fragment="cookies"
+              class="text-gray-400 hover:text-white text-sm transition-colors">{{ 'footer.cookies' | transloco }}</a>
+          </li>
+          <li><a routerLink="/legal" fragment="aviso"
+              class="text-gray-400 hover:text-white text-sm transition-colors">{{ 'footer.legalNotice' | transloco
+              }}</a></li>
         </ul>
       </div>
 
       <!-- Servicio al cliente -->
       <div>
-        <p class="text-white font-semibold mb-4">Servicio al cliente</p>
+        <p class="text-white font-semibold mb-4">{{ 'footer.customerService' | transloco }}</p>
         <ul class="flex flex-col gap-2">
-          <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Envíos y devoluciones</a></li>
-          <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Métodos de pago</a></li>
-          <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Garantía</a></li>
+          <li><a routerLink="/legal" fragment="envios"
+              class="text-gray-400 hover:text-white text-sm transition-colors">{{ 'footer.shipping' | transloco }}</a>
+          </li>
+          <li><a routerLink="/legal" fragment="pago" class="text-gray-400 hover:text-white text-sm transition-colors">{{
+              'footer.payment' | transloco }}</a></li>
+          <li><a routerLink="/legal" fragment="garantia"
+              class="text-gray-400 hover:text-white text-sm transition-colors">{{ 'footer.warranty' | transloco }}</a>
+          </li>
         </ul>
       </div>
 
@@ -49,7 +64,7 @@
 
     <!-- Copyright -->
     <div class="max-w-7xl mx-auto border-t border-gray-800 mt-10 pt-6 text-center">
-      <p class="text-gray-500 text-sm">© 2026 PlayVault. Todos los derechos reservados.</p>
+      <p class="text-gray-500 text-sm">{{ 'footer.copyright' | transloco }}</p>
     </div>
   </div>
 </footer>

@@ -1,0 +1,384 @@
+<div class="min-h-screen bg-[var(--color-bg)]">
+    <div class="max-w-7xl mx-auto px-8 py-10 flex gap-10">
+
+        <!-- Índice lateral -->
+        <aside class="w-64 flex-shrink-0 self-start sticky top-28">
+            <div class="rounded-2xl shadow-sm p-5"
+                style="background: var(--color-surface); border: 1px solid var(--color-border)">
+                <p class="text-sm font-bold text-[var(--color-text)] mb-4 uppercase tracking-wider">{{ 'legal.index' |
+                    transloco }}</p>
+
+                <p class="text-xs font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider mb-1 mt-2">
+                    {{ 'legal.info' | transloco }}</p>
+                <nav class="flex flex-col gap-0.5 mb-3">
+                    <button (click)="scrollTo('nosotros')"
+                        class="text-left text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] py-1.5 px-2 rounded-lg hover:bg-[var(--color-primary-light)] transition-colors cursor-pointer">{{
+                        'legal.aboutUs' | transloco }}</button>
+                    <button (click)="scrollTo('contacto')"
+                        class="text-left text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] py-1.5 px-2 rounded-lg hover:bg-[var(--color-primary-light)] transition-colors cursor-pointer">{{
+                        'legal.contact' | transloco }}</button>
+                    <button (click)="scrollTo('faq')"
+                        class="text-left text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] py-1.5 px-2 rounded-lg hover:bg-[var(--color-primary-light)] transition-colors cursor-pointer">{{
+                        'legal.faq' | transloco }}</button>
+                </nav>
+
+                <div class="border-t border-[var(--color-border)] my-2"></div>
+
+                <p class="text-xs font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider mb-1 mt-2">
+                    {{ 'legal.legal' | transloco }}</p>
+                <nav class="flex flex-col gap-0.5 mb-3">
+                    <button (click)="scrollTo('aviso')"
+                        class="text-left text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] py-1.5 px-2 rounded-lg hover:bg-[var(--color-primary-light)] transition-colors cursor-pointer">{{
+                        'legal.legalNotice' | transloco }}</button>
+                    <button (click)="scrollTo('privacidad')"
+                        class="text-left text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] py-1.5 px-2 rounded-lg hover:bg-[var(--color-primary-light)] transition-colors cursor-pointer">{{
+                        'legal.privacy' | transloco }}</button>
+                    <button (click)="scrollTo('cookies')"
+                        class="text-left text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] py-1.5 px-2 rounded-lg hover:bg-[var(--color-primary-light)] transition-colors cursor-pointer">{{
+                        'legal.cookies' | transloco }}</button>
+                    <button (click)="scrollTo('terminos')"
+                        class="text-left text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] py-1.5 px-2 rounded-lg hover:bg-[var(--color-primary-light)] transition-colors cursor-pointer">{{
+                        'legal.terms' | transloco }}</button>
+                    <button (click)="scrollTo('prototipo')"
+                        class="text-left text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] py-1.5 px-2 rounded-lg hover:bg-[var(--color-primary-light)] transition-colors cursor-pointer">{{
+                        'legal.prototype' | transloco }}</button>
+                </nav>
+
+                <div class="border-t border-[var(--color-border)] my-2"></div>
+
+                <p class="text-xs font-semibold text-[var(--color-text-secondary)] uppercase tracking-wider mb-1 mt-2">
+                    {{ 'legal.customerService' | transloco }}</p>
+                <nav class="flex flex-col gap-0.5">
+                    <button (click)="scrollTo('envios')"
+                        class="text-left text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] py-1.5 px-2 rounded-lg hover:bg-[var(--color-primary-light)] transition-colors cursor-pointer">{{
+                        'legal.shipping' | transloco }}</button>
+                    <button (click)="scrollTo('garantia')"
+                        class="text-left text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] py-1.5 px-2 rounded-lg hover:bg-[var(--color-primary-light)] transition-colors cursor-pointer">{{
+                        'legal.warranty' | transloco }}</button>
+                    <button (click)="scrollTo('pago')"
+                        class="text-left text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] py-1.5 px-2 rounded-lg hover:bg-[var(--color-primary-light)] transition-colors cursor-pointer">{{
+                        'legal.payment' | transloco }}</button>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Contenido -->
+        <div class="flex-1 flex flex-col gap-12 pb-16">
+
+            <!-- GRUPO: Información -->
+            <div class="flex flex-col gap-10">
+                <div class="flex items-center gap-3">
+                    <div class="h-0.5 flex-1" style="background: var(--color-border)"></div>
+                    <span class="text-xs font-bold uppercase tracking-widest text-[var(--color-text-secondary)] px-2">{{
+                        'legal.info' | transloco }}</span>
+                    <div class="h-0.5 flex-1" style="background: var(--color-border)"></div>
+                </div>
+
+                <!-- Sobre nosotros -->
+                <section id="nosotros">
+                    <h2
+                        class="text-2xl font-bold text-[var(--color-text)] mb-4 pb-2 border-b border-[var(--color-border)]">
+                        {{ 'legal.aboutUs' | transloco }}</h2>
+                    <div class="flex flex-col gap-3 text-sm text-[var(--color-text-secondary)] leading-relaxed">
+                        <p>{{ 'legal.aboutUs_p1' | transloco }}</p>
+                        <p>{{ 'legal.aboutUs_p2' | transloco }}</p>
+                        <p>{{ 'legal.aboutUs_p3' | transloco }}</p>
+                        <div class="rounded-xl p-5 mt-2"
+                            style="background: var(--color-bg); border: 1px solid var(--color-border)">
+                            <p class="font-semibold text-[var(--color-text)] mb-3">{{ 'legal.projectCard' | transloco }}
+                            </p>
+                            <ul class="flex flex-col gap-1.5">
+                                <li><span class="font-medium text-[var(--color-text)]">{{ 'legal.student' | transloco
+                                        }}:</span> Gonzalo López Luque</li>
+                                <li><span class="font-medium text-[var(--color-text)]">{{ 'legal.school' | transloco
+                                        }}:</span> IES Sotero Hernández</li>
+                                <li><span class="font-medium text-[var(--color-text)]">{{ 'legal.cycle' | transloco
+                                        }}:</span> {{ 'legal.cycleValue' | transloco }}</li>
+                                <li><span class="font-medium text-[var(--color-text)]">{{ 'legal.year' | transloco
+                                        }}:</span> 2025/2026</li>
+                                <li><span class="font-medium text-[var(--color-text)]">{{ 'legal.stack' | transloco
+                                        }}:</span> Angular 21 · ASP.NET Core 8 · SQL Server</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Contacto -->
+                <section id="contacto">
+                    <h2
+                        class="text-2xl font-bold text-[var(--color-text)] mb-4 pb-2 border-b border-[var(--color-border)]">
+                        {{ 'legal.contact' | transloco }}</h2>
+                    <div class="flex flex-col gap-3 text-sm text-[var(--color-text-secondary)] leading-relaxed">
+                        <p>{{ 'legal.contact_p1' | transloco }}</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+                            <div class="rounded-xl p-4 flex flex-col gap-1"
+                                style="background: var(--color-bg); border: 1px solid var(--color-border)">
+                                <p class="font-semibold text-[var(--color-text)]">{{ 'legal.generalEmail' | transloco }}
+                                </p>
+                                <p class="text-[var(--color-primary)]">info@playvault.es</p>
+                            </div>
+                            <div class="rounded-xl p-4 flex flex-col gap-1"
+                                style="background: var(--color-bg); border: 1px solid var(--color-border)">
+                                <p class="font-semibold text-[var(--color-text)]">{{ 'legal.customerEmail' | transloco
+                                    }}</p>
+                                <p class="text-[var(--color-primary)]">clientes@playvault.es</p>
+                            </div>
+                            <div class="rounded-xl p-4 flex flex-col gap-1"
+                                style="background: var(--color-bg); border: 1px solid var(--color-border)">
+                                <p class="font-semibold text-[var(--color-text)]">{{ 'legal.phone' | transloco }}</p>
+                                <p class="text-[var(--color-primary)]">+34 600 000 000</p>
+                                <p class="text-xs">{{ 'legal.phoneHours' | transloco }}</p>
+                            </div>
+                            <div class="rounded-xl p-4 flex flex-col gap-1"
+                                style="background: var(--color-bg); border: 1px solid var(--color-border)">
+                                <p class="font-semibold text-[var(--color-text)]">{{ 'legal.address' | transloco }}</p>
+                                <p>Calle Ficticia 123</p>
+                                <p>41001 Sevilla, España</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- FAQ -->
+                <section id="faq">
+                    <h2
+                        class="text-2xl font-bold text-[var(--color-text)] mb-4 pb-2 border-b border-[var(--color-border)]">
+                        {{ 'legal.faq' | transloco }}</h2>
+                    <div class="flex flex-col gap-4 text-sm">
+                        <div class="rounded-xl p-5"
+                            style="background: var(--color-surface); border: 1px solid var(--color-border)">
+                            <p class="font-semibold text-[var(--color-text)] mb-2">{{ 'legal.faq_q1' | transloco }}</p>
+                            <p class="text-[var(--color-text-secondary)]">{{ 'legal.faq_a1' | transloco }}</p>
+                        </div>
+                        <div class="rounded-xl p-5"
+                            style="background: var(--color-surface); border: 1px solid var(--color-border)">
+                            <p class="font-semibold text-[var(--color-text)] mb-2">{{ 'legal.faq_q2' | transloco }}</p>
+                            <p class="text-[var(--color-text-secondary)]">{{ 'legal.faq_a2' | transloco }}</p>
+                        </div>
+                        <div class="rounded-xl p-5"
+                            style="background: var(--color-surface); border: 1px solid var(--color-border)">
+                            <p class="font-semibold text-[var(--color-text)] mb-2">{{ 'legal.faq_q3' | transloco }}</p>
+                            <p class="text-[var(--color-text-secondary)]">{{ 'legal.faq_a3' | transloco }}</p>
+                        </div>
+                        <div class="rounded-xl p-5"
+                            style="background: var(--color-surface); border: 1px solid var(--color-border)">
+                            <p class="font-semibold text-[var(--color-text)] mb-2">{{ 'legal.faq_q4' | transloco }}</p>
+                            <p class="text-[var(--color-text-secondary)]">{{ 'legal.faq_a4' | transloco }}</p>
+                        </div>
+                        <div class="rounded-xl p-5"
+                            style="background: var(--color-surface); border: 1px solid var(--color-border)">
+                            <p class="font-semibold text-[var(--color-text)] mb-2">{{ 'legal.faq_q5' | transloco }}</p>
+                            <p class="text-[var(--color-text-secondary)]">{{ 'legal.faq_a5' | transloco }}</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- GRUPO: Legal -->
+            <div class="flex flex-col gap-10">
+                <div class="flex items-center gap-3">
+                    <div class="h-0.5 flex-1" style="background: var(--color-border)"></div>
+                    <span class="text-xs font-bold uppercase tracking-widest text-[var(--color-text-secondary)] px-2">{{
+                        'legal.legal' | transloco }}</span>
+                    <div class="h-0.5 flex-1" style="background: var(--color-border)"></div>
+                </div>
+
+                <!-- Aviso legal -->
+                <section id="aviso">
+                    <h2
+                        class="text-2xl font-bold text-[var(--color-text)] mb-4 pb-2 border-b border-[var(--color-border)]">
+                        {{ 'legal.legalNotice' | transloco }}</h2>
+                    <div class="flex flex-col gap-3 text-sm text-[var(--color-text-secondary)] leading-relaxed">
+                        <p>{{ 'legal.legalNotice_p1' | transloco }}</p>
+                        <ul class="flex flex-col gap-1 ml-4 list-disc">
+                            <li><span class="font-medium text-[var(--color-text)]">{{ 'legal.companyName' | transloco
+                                    }}:</span> {{ 'legal.companyNameValue' | transloco }}</li>
+                            <li><span class="font-medium text-[var(--color-text)]">{{ 'legal.cif' | transloco }}:</span>
+                                {{ 'legal.cifValue' | transloco }}</li>
+                            <li><span class="font-medium text-[var(--color-text)]">{{ 'legal.domicile' | transloco
+                                    }}:</span> {{ 'legal.domicileValue' | transloco }}</li>
+                            <li><span class="font-medium text-[var(--color-text)]">{{ 'legal.emailLabel' | transloco
+                                    }}:</span> info@playvault.es</li>
+                            <li><span class="font-medium text-[var(--color-text)]">{{ 'legal.phoneLabel' | transloco
+                                    }}:</span> +34 600 000 000</li>
+                        </ul>
+                        <p>{{ 'legal.legalNotice_p2' | transloco }}</p>
+                    </div>
+                </section>
+
+                <!-- Política de privacidad -->
+                <section id="privacidad">
+                    <h2
+                        class="text-2xl font-bold text-[var(--color-text)] mb-4 pb-2 border-b border-[var(--color-border)]">
+                        {{ 'legal.privacy' | transloco }}</h2>
+                    <div class="flex flex-col gap-3 text-sm text-[var(--color-text-secondary)] leading-relaxed">
+                        <p>{{ 'legal.privacy_p1' | transloco }}</p>
+                        <h3 class="text-base font-semibold text-[var(--color-text)] mt-2">{{ 'legal.dataCollected' |
+                            transloco }}</h3>
+                        <ul class="flex flex-col gap-1 ml-4 list-disc">
+                            <li>{{ 'legal.data_1' | transloco }}</li>
+                            <li>{{ 'legal.data_2' | transloco }}</li>
+                            <li>{{ 'legal.data_3' | transloco }}</li>
+                        </ul>
+                        <h3 class="text-base font-semibold text-[var(--color-text)] mt-2">{{ 'legal.purposeTitle' |
+                            transloco }}</h3>
+                        <p>{{ 'legal.purpose_p1' | transloco }}</p>
+                        <h3 class="text-base font-semibold text-[var(--color-text)] mt-2">{{ 'legal.rightsTitle' |
+                            transloco }}</h3>
+                        <p>{{ 'legal.rights_p1' | transloco }}</p>
+                    </div>
+                </section>
+
+                <!-- Política de cookies -->
+                <section id="cookies">
+                    <h2
+                        class="text-2xl font-bold text-[var(--color-text)] mb-4 pb-2 border-b border-[var(--color-border)]">
+                        {{ 'legal.cookies' | transloco }}</h2>
+                    <div class="flex flex-col gap-3 text-sm text-[var(--color-text-secondary)] leading-relaxed">
+                        <p>{{ 'legal.cookies_p1' | transloco }}</p>
+                        <h3 class="text-base font-semibold text-[var(--color-text)] mt-2">{{ 'legal.cookiesUsed' |
+                            transloco }}</h3>
+                        <div class="rounded-xl overflow-hidden border border-[var(--color-border)]">
+                            <table class="w-full text-xs">
+                                <thead>
+                                    <tr style="background: var(--color-bg)">
+                                        <th class="text-left px-4 py-3 font-semibold text-[var(--color-text)]">{{
+                                            'legal.cookieName' | transloco }}</th>
+                                        <th class="text-left px-4 py-3 font-semibold text-[var(--color-text)]">{{
+                                            'legal.cookiePurpose' | transloco }}</th>
+                                        <th class="text-left px-4 py-3 font-semibold text-[var(--color-text)]">{{
+                                            'legal.cookieDuration' | transloco }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-t border-[var(--color-border)]">
+                                        <td class="px-4 py-3 text-[var(--color-text)]">auth_token</td>
+                                        <td class="px-4 py-3">{{ 'legal.cookie1_purpose' | transloco }}</td>
+                                        <td class="px-4 py-3">{{ 'legal.cookie1_duration' | transloco }}</td>
+                                    </tr>
+                                    <tr class="border-t border-[var(--color-border)]"
+                                        style="background: var(--color-bg)">
+                                        <td class="px-4 py-3 text-[var(--color-text)]">theme</td>
+                                        <td class="px-4 py-3">{{ 'legal.cookie2_purpose' | transloco }}</td>
+                                        <td class="px-4 py-3">{{ 'legal.cookie2_duration' | transloco }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Términos y condiciones -->
+                <section id="terminos">
+                    <h2
+                        class="text-2xl font-bold text-[var(--color-text)] mb-4 pb-2 border-b border-[var(--color-border)]">
+                        {{ 'legal.terms' | transloco }}</h2>
+                    <div class="flex flex-col gap-3 text-sm text-[var(--color-text-secondary)] leading-relaxed">
+                        <p>{{ 'legal.terms_p1' | transloco }}</p>
+                        <h3 class="text-base font-semibold text-[var(--color-text)] mt-2">{{ 'legal.usageTitle' |
+                            transloco }}</h3>
+                        <p>{{ 'legal.usage_p1' | transloco }}</p>
+                        <h3 class="text-base font-semibold text-[var(--color-text)] mt-2">{{ 'legal.ipTitle' | transloco
+                            }}</h3>
+                        <p>{{ 'legal.ip_p1' | transloco }}</p>
+                        <h3 class="text-base font-semibold text-[var(--color-text)] mt-2">{{ 'legal.liabilityTitle' |
+                            transloco }}</h3>
+                        <p>{{ 'legal.liability_p1' | transloco }}</p>
+                    </div>
+                </section>
+
+                <!-- Sobre este prototipo -->
+                <section id="prototipo">
+                    <h2
+                        class="text-2xl font-bold text-[var(--color-text)] mb-4 pb-2 border-b border-[var(--color-border)]">
+                        {{ 'legal.prototype' | transloco }}</h2>
+                    <div class="rounded-2xl p-6 flex flex-col gap-3 text-sm leading-relaxed"
+                        style="background: var(--color-primary-light); border: 1px solid var(--color-primary)">
+                        <p class="font-bold text-[var(--color-primary)] text-base">{{ 'legal.prototype_warning' |
+                            transloco }}</p>
+                        <p class="text-[var(--color-text)]">{{ 'legal.prototype_p1' | transloco }}</p>
+                        <p class="text-[var(--color-text)]">{{ 'legal.prototype_p2' | transloco }}</p>
+                        <p class="text-[var(--color-text)]">{{ 'legal.prototype_p3' | transloco }}</p>
+                        <p class="text-[var(--color-text)]">{{ 'legal.prototype_p4' | transloco }}</p>
+                    </div>
+                </section>
+            </div>
+
+            <!-- GRUPO: Servicio al cliente -->
+            <div class="flex flex-col gap-10">
+                <div class="flex items-center gap-3">
+                    <div class="h-0.5 flex-1" style="background: var(--color-border)"></div>
+                    <span class="text-xs font-bold uppercase tracking-widest text-[var(--color-text-secondary)] px-2">{{
+                        'legal.customerService' | transloco }}</span>
+                    <div class="h-0.5 flex-1" style="background: var(--color-border)"></div>
+                </div>
+
+                <!-- Envíos y devoluciones -->
+                <section id="envios">
+                    <h2
+                        class="text-2xl font-bold text-[var(--color-text)] mb-4 pb-2 border-b border-[var(--color-border)]">
+                        {{ 'legal.shipping' | transloco }}</h2>
+                    <div class="flex flex-col gap-3 text-sm text-[var(--color-text-secondary)] leading-relaxed">
+                        <div class="rounded-xl p-4"
+                            style="background: var(--color-bg); border: 1px solid var(--color-border)">
+                            <p class="text-[var(--color-primary)] font-semibold">{{ 'legal.shipping_warning' | transloco
+                                }}</p>
+                        </div>
+                        <h3 class="text-base font-semibold text-[var(--color-text)] mt-2">{{ 'legal.deliveryTitle' |
+                            transloco }}</h3>
+                        <ul class="flex flex-col gap-1 ml-4 list-disc">
+                            <li>{{ 'legal.delivery_1' | transloco }}</li>
+                            <li>{{ 'legal.delivery_2' | transloco }}</li>
+                            <li>{{ 'legal.delivery_3' | transloco }}</li>
+                        </ul>
+                        <h3 class="text-base font-semibold text-[var(--color-text)] mt-2">{{ 'legal.shippingCostTitle' |
+                            transloco }}</h3>
+                        <p>{{ 'legal.shippingCost_p1' | transloco }}</p>
+                        <h3 class="text-base font-semibold text-[var(--color-text)] mt-2">{{ 'legal.returnsTitle' |
+                            transloco }}</h3>
+                        <p>{{ 'legal.returns_p1' | transloco }}</p>
+                    </div>
+                </section>
+
+                <!-- Garantía -->
+                <section id="garantia">
+                    <h2
+                        class="text-2xl font-bold text-[var(--color-text)] mb-4 pb-2 border-b border-[var(--color-border)]">
+                        {{ 'legal.warranty' | transloco }}</h2>
+                    <div class="flex flex-col gap-3 text-sm text-[var(--color-text-secondary)] leading-relaxed">
+                        <p>{{ 'legal.warranty_p1' | transloco }}</p>
+                        <ul class="flex flex-col gap-1 ml-4 list-disc">
+                            <li>{{ 'legal.warranty_1' | transloco }}</li>
+                            <li>{{ 'legal.warranty_2' | transloco }}</li>
+                            <li>{{ 'legal.warranty_3' | transloco }}</li>
+                        </ul>
+                        <p>{{ 'legal.warranty_contact' | transloco }}</p>
+                    </div>
+                </section>
+
+                <!-- Métodos de pago -->
+                <section id="pago" class="pb-10">
+                    <h2
+                        class="text-2xl font-bold text-[var(--color-text)] mb-4 pb-2 border-b border-[var(--color-border)]">
+                        {{ 'legal.payment' | transloco }}</h2>
+                    <div class="flex flex-col gap-3 text-sm text-[var(--color-text-secondary)] leading-relaxed">
+                        <div class="rounded-xl p-4"
+                            style="background: var(--color-bg); border: 1px solid var(--color-border)">
+                            <p class="text-[var(--color-primary)] font-semibold">{{ 'legal.payment_warning' | transloco
+                                }}</p>
+                        </div>
+                        <p>{{ 'legal.payment_p1' | transloco }}</p>
+                        <ul class="flex flex-col gap-1 ml-4 list-disc">
+                            <li>{{ 'legal.payment_1' | transloco }}</li>
+                            <li>{{ 'legal.payment_2' | transloco }}</li>
+                            <li>{{ 'legal.payment_3' | transloco }}</li>
+                            <li>{{ 'legal.payment_4' | transloco }}</li>
+                        </ul>
+                        <p>{{ 'legal.payment_p2' | transloco }}</p>
+                    </div>
+                </section>
+            </div>
+
+        </div>
+    </div>
+</div>

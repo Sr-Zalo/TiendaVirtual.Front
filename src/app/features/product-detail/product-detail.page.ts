@@ -7,11 +7,13 @@ import { AuthService } from '../../core/services/auth.service';
 import { AuthModalService } from '../../core/services/auth-modal.service';
 import { AdminProductService } from '../../core/services/admin-product.service';
 import { Product } from '../../core/models/product.model';
+import { ModalService } from '../../core/services/modal.service';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslocoModule],
   templateUrl: './product-detail.page.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
@@ -24,6 +26,8 @@ export class ProductDetailPage implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
+  private modalService = inject(ModalService);
+  private translocoService = inject(TranslocoService);
 
   product: Product | null = null;
   relatedProducts: Product[] = [];
@@ -78,7 +82,7 @@ export class ProductDetailPage implements OnInit {
           .slice(0, 4);
         this.cdr.detectChanges();
       },
-      error: () => {}
+      error: () => { }
     });
   }
 
@@ -108,9 +112,15 @@ export class ProductDetailPage implements OnInit {
     });
   }
 
-  deleteProduct() {
+  async deleteProduct() {
     if (!this.product) return;
-    if (!confirm(`¿Eliminar "${this.product.name}" del catálogo?`)) return;
+    const confirmed = await this.modalService.confirm(
+      this.translocoService.translate('modals.deleteProduct.title'),
+      `${this.translocoService.translate('modals.deleteProduct.message')} "${this.product.name}" ${this.translocoService.translate('modals.deleteProduct.message2')}`,
+      this.translocoService.translate('modals.deleteProduct.confirm'),
+      this.translocoService.translate('modals.deleteProduct.cancel')
+    );
+    if (!confirmed) return;
     this.adminProductService.deleteProduct(this.product.productId).subscribe({
       next: () => this.router.navigate(['/catalog'])
     });

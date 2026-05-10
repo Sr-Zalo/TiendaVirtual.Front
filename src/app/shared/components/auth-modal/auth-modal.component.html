@@ -1,94 +1,93 @@
 @if (modalService.modalType()) {
-  <div class="backdrop fixed inset-0 z-50 flex items-center justify-center px-4"
-       style="background: rgba(0,0,0,0.5)"
-       (click)="onBackdropClick($event)">
+<div class="backdrop fixed inset-0 z-50 flex items-center justify-center px-4" style="background: rgba(0,0,0,0.5)"
+  (click)="onBackdropClick($event)">
 
-    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-8 relative">
+  <div class="rounded-2xl shadow-2xl w-full max-w-sm p-8 relative" style="background: var(--color-surface)">
 
-      <!-- Cerrar -->
-      <button (click)="close()"
-              class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
-        <ph-x size="22"></ph-x>
+    <button (click)="close()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
+      <ph-x size="22"></ph-x>
+    </button>
+
+    @if (isLogin) {
+    <h2 class="text-2xl font-bold text-[var(--color-text)] mb-6">{{ 'auth.login.title' | transloco }}</h2>
+
+    @if (error) {
+    <div class="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl mb-4">{{ error }}</div>
+    }
+
+    <div class="flex flex-col gap-4">
+      <div>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'auth.login.email' | transloco
+          }}</label>
+        <input type="email" [(ngModel)]="email" [placeholder]="'auth.login.emailPlaceholder' | transloco"
+          class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)] transition-colors" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'auth.login.password' | transloco
+          }}</label>
+        <input type="password" [(ngModel)]="password" [placeholder]="'auth.login.passwordPlaceholder' | transloco"
+          class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)] transition-colors" />
+      </div>
+      <button (click)="submitLogin()" [disabled]="loading"
+        class="w-full bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white py-3 rounded-xl font-semibold text-sm transition-colors disabled:opacity-50 mt-2">
+        {{ loading ? ('auth.login.submitting' | transloco) : ('auth.login.submit' | transloco) }}
       </button>
-
-      @if (isLogin) {
-        <!-- LOGIN -->
-        <h2 class="text-2xl font-bold text-[var(--color-text)] mb-6">Iniciar Sesión</h2>
-
-        @if (error) {
-          <div class="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl mb-4">{{ error }}</div>
-        }
-
-        <div class="flex flex-col gap-4">
-          <div>
-            <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Correo electrónico</label>
-            <input type="email" [(ngModel)]="email" placeholder="tu@email.com"
-                   class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)] transition-colors" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Contraseña</label>
-            <input type="password" [(ngModel)]="password" placeholder="••••••••"
-                   class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)] transition-colors" />
-          </div>
-          <button (click)="submitLogin()" [disabled]="loading"
-                  class="w-full bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white py-3 rounded-xl font-semibold text-sm transition-colors disabled:opacity-50 mt-2">
-            {{ loading ? 'Entrando...' : 'Iniciar Sesión' }}
-          </button>
-        </div>
-
-        <p class="text-center text-sm text-[var(--color-text-secondary)] mt-5">
-          ¿No tienes cuenta?
-          <button (click)="switchToRegister()"
-                  class="text-[var(--color-primary)] font-semibold hover:underline">
-            Regístrate
-          </button>
-        </p>
-      }
-
-      @if (isRegister) {
-        <!-- REGISTRO -->
-        <h2 class="text-2xl font-bold text-[var(--color-text)] mb-6">Registrarse</h2>
-
-        @if (error) {
-          <div class="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl mb-4">{{ error }}</div>
-        }
-
-        <div class="flex flex-col gap-4">
-          <div>
-            <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Nombre</label>
-            <input type="text" [(ngModel)]="name" placeholder="Tu nombre"
-                   class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)] transition-colors" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Apellidos</label>
-            <input type="text" [(ngModel)]="surname" placeholder="Tus apellidos"
-                   class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)] transition-colors" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Correo electrónico</label>
-            <input type="email" [(ngModel)]="email" placeholder="tu@email.com"
-                   class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)] transition-colors" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Contraseña</label>
-            <input type="password" [(ngModel)]="password" placeholder="••••••••"
-                   class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)] transition-colors" />
-          </div>
-          <button (click)="submitRegister()" [disabled]="loading"
-                  class="w-full bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white py-3 rounded-xl font-semibold text-sm transition-colors disabled:opacity-50 mt-2">
-            {{ loading ? 'Registrando...' : 'Crear Cuenta' }}
-          </button>
-        </div>
-
-        <p class="text-center text-sm text-[var(--color-text-secondary)] mt-5">
-          ¿Ya tienes cuenta?
-          <button (click)="switchToLogin()"
-                  class="text-[var(--color-primary)] font-semibold hover:underline">
-            Inicia sesión
-          </button>
-        </p>
-      }
-
     </div>
+
+    <p class="text-center text-sm text-[var(--color-text-secondary)] mt-5">
+      {{ 'auth.login.noAccount' | transloco }}
+      <button (click)="switchToRegister()" class="text-[var(--color-primary)] font-semibold hover:underline">
+        {{ 'auth.login.register' | transloco }}
+      </button>
+    </p>
+    }
+
+    @if (isRegister) {
+    <h2 class="text-2xl font-bold text-[var(--color-text)] mb-6">{{ 'auth.register.title' | transloco }}</h2>
+
+    @if (error) {
+    <div class="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl mb-4">{{ error }}</div>
+    }
+
+    <div class="flex flex-col gap-4">
+      <div>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'auth.register.name' | transloco
+          }}</label>
+        <input type="text" [(ngModel)]="name" [placeholder]="'auth.register.namePlaceholder' | transloco"
+          class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)] transition-colors" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'auth.register.surname' | transloco
+          }}</label>
+        <input type="text" [(ngModel)]="surname" [placeholder]="'auth.register.surnamePlaceholder' | transloco"
+          class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)] transition-colors" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'auth.register.email' | transloco
+          }}</label>
+        <input type="email" [(ngModel)]="email" [placeholder]="'auth.register.emailPlaceholder' | transloco"
+          class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)] transition-colors" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'auth.register.password' | transloco
+          }}</label>
+        <input type="password" [(ngModel)]="password" [placeholder]="'auth.register.passwordPlaceholder' | transloco"
+          class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)] transition-colors" />
+      </div>
+      <button (click)="submitRegister()" [disabled]="loading"
+        class="w-full bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white py-3 rounded-xl font-semibold text-sm transition-colors disabled:opacity-50 mt-2">
+        {{ loading ? ('auth.register.submitting' | transloco) : ('auth.register.submit' | transloco) }}
+      </button>
+    </div>
+
+    <p class="text-center text-sm text-[var(--color-text-secondary)] mt-5">
+      {{ 'auth.register.hasAccount' | transloco }}
+      <button (click)="switchToLogin()" class="text-[var(--color-primary)] font-semibold hover:underline">
+        {{ 'auth.register.login' | transloco }}
+      </button>
+    </p>
+    }
+
   </div>
+</div>
 }

@@ -5,11 +5,14 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
 import { CartService } from '../../../core/services/cart.service';
 import { AuthModalService } from '../../../core/services/auth-modal.service';
+import { ModalService } from '../../../core/services/modal.service';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
+
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, TranslocoModule],
   templateUrl: './navbar.component.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
@@ -19,16 +22,18 @@ export class NavbarComponent implements OnInit {
   private authModalService = inject(AuthModalService);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
+  private modalService = inject(ModalService);
+  private translocoService = inject(TranslocoService);
 
   cartCount = 0;
   searchQuery = '';
 
   readonly navLinks = [
-    { label: 'NOVEDADES', path: '/novedades', query: {} },
-    { label: 'PRÓXIMAMENTE', path: '/proximamente', query: {} },
-    { label: 'PROMOCIONES', path: '/promociones', query: {} },
-    { label: 'RECOMENDADOS', path: '/recomendados', query: {} },
-    { label: 'CATÁLOGO', path: '/catalog', query: {} },
+    { label: 'NOVEDADES', translationKey: 'navbar.links.news', path: '/novedades', query: {} },
+    { label: 'PRÓXIMAMENTE', translationKey: 'navbar.links.comingSoon', path: '/proximamente', query: {} },
+    { label: 'PROMOCIONES', translationKey: 'navbar.links.promotions', path: '/promociones', query: {} },
+    { label: 'RECOMENDADOS', translationKey: 'navbar.links.recommended', path: '/recomendados', query: {} },
+    { label: 'CATÁLOGO', translationKey: 'navbar.links.catalog', path: '/catalog', query: {} },
   ];
 
   ngOnInit() {
@@ -65,8 +70,14 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['/cart']);
   }
 
-  logout() {
-    if (!confirm('¿Seguro que quieres cerrar sesión?')) return;
+  async logout() {
+    const confirmed = await this.modalService.confirm(
+      this.translocoService.translate('modals.logout.title'),
+      this.translocoService.translate('modals.logout.message'),
+      this.translocoService.translate('modals.logout.confirm'),
+      this.translocoService.translate('modals.logout.cancel')
+    );
+    if (!confirmed) return;
     this.authService.logout();
     this.cartCount = 0;
     this.router.navigate(['/']);

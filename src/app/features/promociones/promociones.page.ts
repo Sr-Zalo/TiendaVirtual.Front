@@ -7,11 +7,12 @@ import { AuthService } from '../../core/services/auth.service';
 import { AuthModalService } from '../../core/services/auth-modal.service';
 import { Product } from '../../core/models/product.model';
 import { Router } from '@angular/router';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 
 @Component({
     selector: 'app-promociones',
     standalone: true,
-    imports: [CommonModule, RouterModule],
+    imports: [CommonModule, RouterModule, TranslocoModule],
     templateUrl: './promociones.page.html',
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
@@ -22,11 +23,24 @@ export class PromocionesPage implements OnInit {
     private authModalService = inject(AuthModalService);
     private router = inject(Router);
     private cdr = inject(ChangeDetectorRef);
+    private translocoService = inject(TranslocoService);
 
     products: Product[] = [];
     loading = true;
     confirmProduct: Product | null = null;
     cartError = '';
+
+    readonly categoryKeys: Record<string, string> = {
+        'Juego de mesa': 'categories.boardGame',
+        'Videojuego': 'categories.videoGame',
+        'Libro': 'categories.book',
+        'Coleccionable': 'categories.collectible',
+        'Puzzle': 'categories.puzzle'
+    };
+
+    getCategoryKey(name: string): string {
+        return this.categoryKeys[name] ?? name;
+    }
 
     ngOnInit() {
         this.productService.getFiltered({ bestSellers: true }).subscribe({

@@ -1,0 +1,58 @@
+<div class="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+
+    @if (isOpen) {
+    <div class="border border-[var(--color-border)] rounded-2xl shadow-xl p-4 flex flex-col gap-3 min-w-48"
+        style="background: var(--color-surface)">
+
+        <!-- Tema -->
+        <div class="flex items-center justify-between gap-4">
+            <span class="text-sm font-medium text-[var(--color-text)]">
+                {{ (themeService.isDark() ? 'settings.darkMode' : 'settings.lightMode') | transloco }}
+            </span>
+            <button (click)="themeService.toggle()"
+                class="relative w-12 h-6 rounded-full transition-colors duration-300 cursor-pointer flex-shrink-0"
+                [style.background]="themeService.isDark() ? '#6D28D9' : '#D1D5DB'">
+                <span
+                    class="absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-all duration-300 flex items-center justify-center"
+                    [style.left]="themeService.isDark() ? '26px' : '2px'">
+                    @if (themeService.isDark()) {
+                    <ph-moon size="12" color="#6D28D9"></ph-moon>
+                    } @else {
+                    <ph-sun size="12" color="#D97706"></ph-sun>
+                    }
+                </span>
+            </button>
+        </div>
+
+        <div class="border-t border-[var(--color-border)]"></div>
+
+        <!-- Idioma -->
+        <div class="flex items-center justify-between gap-4">
+            <span class="text-sm font-medium text-[var(--color-text)]">
+                {{ currentLang === 'es' ? 'Español' : 'English' }}
+            </span>
+            <button (click)="toggleLang()"
+                class="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-[var(--color-border)] hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-colors cursor-pointer text-sm font-semibold text-[var(--color-text)]">
+                {{ currentLang === 'es' ? '🇬🇧 EN' : '🇪🇸 ES' }}
+            </button>
+        </div>
+
+    </div>
+    }
+
+    <button (click)="toggle()"
+        class="w-12 h-12 rounded-full shadow-lg flex items-center justify-center transition-all duration-300 cursor-pointer"
+        [style.background]="isOpen ? 'var(--color-primary)' : 'var(--color-surface)'"
+        [style.border]="'1.5px solid var(--color-border)'">
+        @if (isOpen) {
+        <ph-x size="20" color="white"></ph-x>
+        } @else {
+        @if (themeService.isDark()) {
+        <ph-moon size="20" color="var(--color-primary)"></ph-moon>
+        } @else {
+        <ph-sun size="20" color="#D97706"></ph-sun>
+        }
+        }
+    </button>
+
+</div>

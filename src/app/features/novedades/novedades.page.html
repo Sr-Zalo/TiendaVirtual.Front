@@ -1,80 +1,83 @@
 <div class="min-h-screen bg-[var(--color-bg)]">
   <div class="max-w-7xl mx-auto px-8 py-10">
 
-    <h1 class="text-4xl font-bold text-[var(--color-text)] mb-2">Novedades</h1>
-    <p class="text-[var(--color-text-secondary)] mb-10">Los últimos productos añadidos a nuestra tienda</p>
+    <h1 class="text-4xl font-bold text-[var(--color-text)] mb-2">{{ 'novedades.title' | transloco }}</h1>
+    <p class="text-[var(--color-text-secondary)] mb-10">{{ 'novedades.subtitle' | transloco }}</p>
 
     @if (loading) {
-      <div class="text-center py-20 text-gray-400">Cargando novedades...</div>
+    <div class="text-center py-20 text-[var(--color-text-secondary)]">{{ 'novedades.loading' | transloco }}</div>
     }
 
     @if (!loading) {
-      @for (cat of categories; track cat.categoryId) {
-        @if ((productsByCategory[cat.categoryId]?.length ?? 0) > 0) {
-          <div class="mb-12">
-            <div class="flex items-center justify-between mb-6">
-              <h2 class="text-2xl font-bold text-[var(--color-text)]">{{ cat.name }}</h2>
-              <a [routerLink]="['/catalog']" [queryParams]="{categoryId: cat.categoryId}"
-                 class="text-sm text-[var(--color-primary)] hover:underline font-medium">
-                Ver todos →
-              </a>
+    @for (cat of categories; track cat.categoryId) {
+    @if ((productsByCategory[cat.categoryId]?.length ?? 0) > 0) {
+    <div class="mb-12">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold text-[var(--color-text)]">{{ getCategoryKey(cat.name) | transloco }}</h2>
+        <a [routerLink]="['/catalog']" [queryParams]="{categoryId: cat.categoryId}"
+          class="text-sm text-[var(--color-primary)] hover:underline font-medium">
+          {{ 'novedades.seeAll' | transloco }}
+        </a>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        @for (product of productsByCategory[cat.categoryId]; track product.productId) {
+        <div class="rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+          style="background: var(--color-surface)">
+          <a [routerLink]="['/product', product.productId]">
+            <div class="h-44 flex items-center justify-center text-[var(--color-text-secondary)] text-sm"
+              style="background: var(--color-bg)">
+              Imagen
             </div>
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-              @for (product of productsByCategory[cat.categoryId]; track product.productId) {
-                <div class="bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-                  <a [routerLink]="['/product', product.productId]">
-                    <div class="bg-[var(--color-bg)] h-44 flex items-center justify-center text-gray-400 text-sm">
-                      Imagen
-                    </div>
-                  </a>
-                  <div class="p-4">
-                    <a [routerLink]="['/product', product.productId]"
-                       class="block text-sm font-semibold text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors mb-2 line-clamp-2">
-                      {{ product.name }}
-                    </a>
-                    <p class="text-base font-bold text-[var(--color-primary)] mb-3">{{ product.price }} €</p>
-                    <button (click)="openConfirm(product)"
-                            [disabled]="product.stock === 0"
-                            class="w-full bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white py-2 rounded-xl font-semibold text-xs transition-colors disabled:opacity-50">
-                      {{ product.stock === 0 ? 'Sin stock' : 'Añadir al carrito' }}
-                    </button>
-                  </div>
-                </div>
-              }
-            </div>
+          </a>
+          <div class="p-4">
+            <a [routerLink]="['/product', product.productId]"
+              class="block text-sm font-semibold text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors mb-2 line-clamp-2">
+              {{ product.name }}
+            </a>
+            <p class="text-base font-bold text-[var(--color-primary)] mb-3">{{ product.price }} €</p>
+            <button (click)="openConfirm(product)" [disabled]="product.stock === 0"
+              class="w-full bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white py-2 rounded-xl font-semibold text-xs transition-colors disabled:opacity-50">
+              {{ product.stock === 0 ? ('novedades.outOfStock' | transloco) : ('novedades.addToCart' | transloco) }}
+            </button>
           </div>
+        </div>
         }
-      }
+      </div>
+    </div>
+    }
+    }
     }
 
   </div>
 </div>
 
 @if (confirmProduct) {
-  <div class="fixed inset-0 z-50 flex items-center justify-center" style="background: rgba(0,0,0,0.5)">
-    <div class="bg-white rounded-2xl shadow-xl p-8 max-w-sm w-full mx-4">
-      <div class="flex items-start justify-between mb-4">
-        <h3 class="text-lg font-bold text-[var(--color-text)]">Añadir al carrito</h3>
-        <button (click)="closeConfirm()" class="text-gray-400 hover:text-gray-600 transition-colors">
-          <ph-x size="20"></ph-x>
-        </button>
-      </div>
-      @if (cartError) {
-        <div class="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl mb-4">{{ cartError }}</div>
-      }
-      <p class="text-[var(--color-text-secondary)] mb-6">
-        ¿Añadir <span class="font-semibold text-[var(--color-text)]">{{ confirmProduct.name }}</span> al carrito?
-      </p>
-      <div class="flex gap-3">
-        <button (click)="closeConfirm()"
-                class="flex-1 border border-[var(--color-border)] text-[var(--color-text)] py-2.5 rounded-xl font-semibold text-sm hover:bg-[var(--color-bg)] transition-colors">
-          Cancelar
-        </button>
-        <button (click)="confirmAddToCart()"
-                class="flex-1 bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white py-2.5 rounded-xl font-semibold text-sm transition-colors">
-          Añadir
-        </button>
-      </div>
+<div class="fixed inset-0 z-50 flex items-center justify-center" style="background: rgba(0,0,0,0.5)">
+  <div class="rounded-2xl shadow-xl p-8 max-w-sm w-full mx-4" style="background: var(--color-surface)">
+    <div class="flex items-start justify-between mb-4">
+      <h3 class="text-lg font-bold text-[var(--color-text)]">{{ 'novedades.addToCartTitle' | transloco }}</h3>
+      <button (click)="closeConfirm()"
+        class="text-[var(--color-text-secondary)] hover:text-[var(--color-text)] transition-colors">
+        <ph-x size="20"></ph-x>
+      </button>
+    </div>
+    @if (cartError) {
+    <div class="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl mb-4">{{ cartError }}</div>
+    }
+    <p class="text-[var(--color-text-secondary)] mb-6">
+      {{ 'novedades.addToCartConfirm' | transloco }} <span class="font-semibold text-[var(--color-text)]">{{
+        confirmProduct.name }}</span> {{ 'novedades.addToCartConfirm2' | transloco }}
+    </p>
+    <div class="flex gap-3">
+      <button (click)="closeConfirm()"
+        class="flex-1 border border-[var(--color-border)] text-[var(--color-text)] py-2.5 rounded-xl font-semibold text-sm hover:bg-[var(--color-bg)] transition-colors">
+        {{ 'novedades.cancel' | transloco }}
+      </button>
+      <button (click)="confirmAddToCart()"
+        class="flex-1 bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white py-2.5 rounded-xl font-semibold text-sm transition-colors">
+        {{ 'novedades.add' | transloco }}
+      </button>
     </div>
   </div>
+</div>
 }

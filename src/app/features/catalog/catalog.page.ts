@@ -10,11 +10,13 @@ import { CategoryService } from '../../core/services/category.service';
 import { AdminProductService } from '../../core/services/admin-product.service';
 import { Product, ProductFilterParams } from '../../core/models/product.model';
 import { Category } from '../../core/models/category.model';
+import { ModalService } from '../../core/services/modal.service';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-catalog',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, TranslocoModule],
   templateUrl: './catalog.page.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
@@ -28,6 +30,8 @@ export class CatalogPage implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
+  private modalService = inject(ModalService);
+  private translocoService = inject(TranslocoService);
 
   products: Product[] = [];
   categories: Category[] = [];
@@ -46,12 +50,26 @@ export class CatalogPage implements OnInit {
   currentPage = 1;
   pageSize = 15;
 
-  readonly filterLabels: Record<string, string> = {
-    'new': 'Novedades',
-    'soon': 'Próximamente',
-    'best': 'Más vendidos',
-    'recommended': 'Recomendados'
+  readonly categoryKeys: Record<string, string> = {
+    'Juego de mesa': 'categories.boardGame',
+    'Videojuego': 'categories.videoGame',
+    'Libro': 'categories.book',
+    'Coleccionable': 'categories.collectible',
+    'Puzzle': 'categories.puzzle'
   };
+
+  getCategoryKey(name: string): string {
+    return this.categoryKeys[name] ?? name;
+  }
+
+  get filterLabels(): Record<string, string> {
+    return {
+      'new': this.translocoService.translate('catalog.filterLabels.new'),
+      'soon': this.translocoService.translate('catalog.filterLabels.soon'),
+      'best': this.translocoService.translate('catalog.filterLabels.best'),
+      'recommended': this.translocoService.translate('catalog.filterLabels.recommended'),
+    };
+  }
 
   get isAdmin() { return this.authService.isAdmin(); }
   get isBoardGame() { return this.selectedCategoryName === 'Juego de mesa'; }
@@ -174,10 +192,16 @@ export class CatalogPage implements OnInit {
     });
   }
 
-  deleteProduct(product: Product, event: Event) {
+  async deleteProduct(product: Product, event: Event) {
     event.stopPropagation();
     event.preventDefault();
-    if (!confirm(`¿Eliminar "${product.name}" del catálogo?`)) return;
+    const confirmed = await this.modalService.confirm(
+      this.translocoService.translate('modals.deleteProduct.title'),
+      `${this.translocoService.translate('modals.deleteProduct.message')} "${product.name}" ${this.translocoService.translate('modals.deleteProduct.message2')}`,
+      this.translocoService.translate('modals.deleteProduct.confirm'),
+      this.translocoService.translate('modals.deleteProduct.cancel')
+    );
+    if (!confirmed) return;
     this.adminProductService.deleteProduct(product.productId).subscribe({
       next: () => {
         this.products = this.products.filter(p => p.productId !== product.productId);

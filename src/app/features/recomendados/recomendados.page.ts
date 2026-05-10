@@ -5,11 +5,12 @@ import { CartService } from '../../core/services/cart.service';
 import { AuthService } from '../../core/services/auth.service';
 import { AuthModalService } from '../../core/services/auth-modal.service';
 import { Product } from '../../core/models/product.model';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 
 @Component({
     selector: 'app-recomendados',
     standalone: true,
-    imports: [CommonModule, RouterModule],
+    imports: [CommonModule, RouterModule, TranslocoModule],
     templateUrl: './recomendados.page.html',
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
@@ -18,9 +19,22 @@ export class RecomendadosPage implements OnInit {
     private authService = inject(AuthService);
     private authModalService = inject(AuthModalService);
     private cdr = inject(ChangeDetectorRef);
+    private translocoService = inject(TranslocoService);
 
     confirmProduct: Product | null = null;
     cartError = '';
+    
+    readonly categoryKeys: Record<string, string> = {
+        'Juego de mesa': 'categories.boardGame',
+        'Videojuego': 'categories.videoGame',
+        'Libro': 'categories.book',
+        'Coleccionable': 'categories.collectible',
+        'Puzzle': 'categories.puzzle'
+    };
+
+    getCategoryKey(name: string): string {
+        return this.categoryKeys[name] ?? name;
+    }
 
     products: Product[] = [
         { productId: 1, name: 'Catan', price: 49.99, stock: 10, categoryName: 'Juego de mesa', categoryId: 1 },

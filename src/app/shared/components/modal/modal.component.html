@@ -1,0 +1,58 @@
+@if (modalService.isOpen()) {
+<div class="fixed inset-0 z-[100] flex items-center justify-center px-4" style="background: rgba(0,0,0,0.5)">
+    <div class="rounded-2xl shadow-2xl w-full max-w-sm p-8" style="background: var(--color-surface)">
+
+        <div class="flex justify-center mb-4">
+            @if (modalService.config().type === 'success') {
+            <div class="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center">
+                <ph-check size="28" color="#16a34a" weight="bold"></ph-check>
+            </div>
+            }
+            @if (modalService.config().type === 'error') {
+            <div class="w-14 h-14 rounded-full bg-red-100 flex items-center justify-center">
+                <ph-x size="28" color="#dc2626" weight="bold"></ph-x>
+            </div>
+            }
+            @if (modalService.config().type === 'confirm') {
+            <div class="w-14 h-14 rounded-full bg-[var(--color-primary-light)] flex items-center justify-center">
+                <ph-question size="28" color="var(--color-primary)" weight="bold"></ph-question>
+            </div>
+            }
+            @if (modalService.config().type === 'alert') {
+            <div class="w-14 h-14 rounded-full bg-yellow-100 flex items-center justify-center">
+                <ph-warning size="28" color="#d97706" weight="bold"></ph-warning>
+            </div>
+            }
+        </div>
+
+        <h3 class="text-xl font-bold text-[var(--color-text)] text-center mb-2">
+            {{ modalService.config().title }}
+        </h3>
+
+        <p class="text-sm text-[var(--color-text-secondary)] text-center mb-8 leading-relaxed">
+            {{ modalService.config().message }}
+        </p>
+
+        <div class="flex gap-3">
+            @if (modalService.config().type === 'confirm') {
+            <button (click)="modalService.resolve(false)"
+                class="flex-1 border border-[var(--color-border)] text-[var(--color-text)] py-3 rounded-xl font-semibold text-sm hover:bg-[var(--color-bg)] transition-colors cursor-pointer">
+                {{ modalService.config().cancelText ?? ('common.cancel' | transloco) }}
+            </button>
+            }
+            <button (click)="modalService.resolve(true)"
+                class="flex-1 py-3 rounded-xl font-semibold text-sm transition-colors cursor-pointer"
+                [class.bg-[var(--color-primary)]]="modalService.config().type === 'confirm' || modalService.config().type === 'alert'"
+                [class.hover:bg-[var(--color-primary-hover)]]="modalService.config().type === 'confirm' || modalService.config().type === 'alert'"
+                [class.text-white]="modalService.config().type === 'confirm' || modalService.config().type === 'alert'"
+                [class.bg-green-500]="modalService.config().type === 'success'"
+                [class.hover:bg-green-600]="modalService.config().type === 'success'"
+                [class.bg-red-500]="modalService.config().type === 'error'"
+                [class.hover:bg-red-600]="modalService.config().type === 'error'">
+                {{ modalService.config().confirmText ?? ('common.accept' | transloco) }}
+            </button>
+        </div>
+
+    </div>
+</div>
+}

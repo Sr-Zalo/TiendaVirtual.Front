@@ -7,11 +7,12 @@ import { CategoryService } from '../../../core/services/category.service';
 import { ProductService } from '../../../core/services/product.service';
 import { AdminProductService } from '../../../core/services/admin-product.service';
 import { Category } from '../../../core/models/category.model';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-product-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, TranslocoModule],
   templateUrl: './product-form.page.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
@@ -36,6 +37,7 @@ export class ProductFormPage implements OnInit {
     name: '',
     description: '',
     price: 0,
+    isRecommended: false,
     stock: 0,
     minPlayers: null as number | null,
     maxPlayers: null as number | null,

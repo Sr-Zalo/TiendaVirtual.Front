@@ -4,11 +4,12 @@ import { RouterModule, Router } from '@angular/router';
 import { CartService } from '../../core/services/cart.service';
 import { OrderService } from '../../core/services/order.service';
 import { CartItem } from '../../core/models/cart.model';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslocoModule],
   templateUrl: './cart.page.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

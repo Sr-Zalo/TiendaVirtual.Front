@@ -1,17 +1,17 @@
 <div class="max-w-2xl mx-auto px-6 py-10">
 
   @if (loadingProduct) {
-  <div class="text-center py-20 text-gray-400">Cargando producto...</div>
+  <div class="text-center py-20 text-[var(--color-text-secondary)]">{{ 'admin.loading' | transloco }}</div>
   } @else {
 
   <div class="flex items-center gap-4 mb-8">
     <a routerLink="/catalog"
       class="text-[var(--color-primary)] hover:underline text-sm font-medium flex items-center gap-2">
       <ph-arrow-left size="18"></ph-arrow-left>
-      Volver
+      {{ 'admin.back' | transloco }}
     </a>
     <h1 class="text-3xl font-bold text-[var(--color-text)]">
-      {{ isEdit ? 'Editar producto' : 'Nuevo producto' }}
+      {{ isEdit ? ('admin.editProduct' | transloco) : ('admin.newProduct' | transloco) }}
     </h1>
   </div>
 
@@ -19,232 +19,294 @@
   <div class="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl mb-4">{{ error }}</div>
   }
 
-  <div class="bg-white rounded-2xl shadow-sm p-8 flex flex-col gap-5">
+  <div class="rounded-2xl shadow-sm p-8 flex flex-col gap-5" style="background: var(--color-surface)">
 
-    <!-- Categoría -->
     <div>
-      <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Categoría</label>
+      <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.category' | transloco }}</label>
       <select [(ngModel)]="form.categoryId" [disabled]="isEdit"
-        class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)] disabled:bg-gray-50 disabled:text-gray-400">
-        <option value="0" disabled>Selecciona una categoría</option>
+        class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)] disabled:opacity-50">
+        <option value="0" disabled>{{ 'admin.selectCategory' | transloco }}</option>
         @for (cat of categories; track cat.categoryId) {
         <option [value]="cat.categoryId">{{ cat.name }}</option>
         }
       </select>
       @if (isEdit) {
-      <p class="text-xs text-gray-400 mt-1">La categoría no se puede cambiar al editar</p>
+      <p class="text-xs text-[var(--color-text-secondary)] mt-1">{{ 'admin.categoryFixed' | transloco }}</p>
       }
     </div>
 
-    <!-- Nombre -->
     <div>
-      <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Nombre</label>
-      <input type="text" [(ngModel)]="form.name"
-        class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]"
-        placeholder="Nombre del producto" />
+      <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.name' | transloco }}</label>
+      <input type="text" [(ngModel)]="form.name" [placeholder]="'admin.namePlaceholder' | transloco"
+        class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]" />
     </div>
 
-    <!-- Descripción -->
     <div>
-      <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Descripción</label>
+      <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.description' | transloco
+        }}</label>
       <textarea [(ngModel)]="form.description" rows="3" maxlength="2000"
-        class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]"
-        placeholder="Descripción del producto"></textarea>
+        [placeholder]="'admin.descriptionPlaceholder' | transloco"
+        class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]"></textarea>
       <p class="text-xs text-right mt-1" [class.text-red-500]="form.description.length >= 1900"
-        [class.text-gray-400]="form.description.length < 1900">
+        [class.text-[var(--color-text-secondary)]]="form.description.length < 1900">
         {{ form.description.length }} / 2000
       </p>
     </div>
 
-    <!-- Precio y Stock -->
     <div class="grid grid-cols-2 gap-4">
       <div>
-        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Precio (€)</label>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.price' | transloco }}</label>
         <input type="number" [(ngModel)]="form.price" min="0" step="0.01"
           class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]" />
       </div>
       <div>
-        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Stock</label>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.stock' | transloco }}</label>
         <input type="number" [(ngModel)]="form.stock" min="0"
           class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]" />
       </div>
     </div>
 
-    <!-- Campos BoardGame -->
     @if (isBoardGame) {
     <hr class="border-[var(--color-border)]" />
-    <p class="text-sm font-bold text-[var(--color-text)]">Datos del juego de mesa</p>
+    <p class="text-sm font-bold text-[var(--color-text)]">{{ 'admin.boardGame.title' | transloco }}</p>
     <div class="grid grid-cols-2 gap-4">
       <div>
-        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Jugadores mín.</label>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.boardGame.minPlayers' |
+          transloco }}</label>
         <input type="number" [(ngModel)]="form.minPlayers" min="1"
           class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]" />
       </div>
       <div>
-        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Jugadores máx.</label>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.boardGame.maxPlayers' |
+          transloco }}</label>
         <input type="number" [(ngModel)]="form.maxPlayers" min="1"
           class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]" />
       </div>
       <div>
-        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Duración media (min)</label>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.boardGame.avgDuration' |
+          transloco }}</label>
         <input type="number" [(ngModel)]="form.avgDuration" min="0"
           class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]" />
       </div>
       <div>
-        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Edad mínima</label>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.boardGame.minAge' | transloco
+          }}</label>
         <input type="number" [(ngModel)]="form.minAge" min="0"
           class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]" />
       </div>
     </div>
     <div>
-      <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Tipo</label>
-      <input type="text" [(ngModel)]="form.type"
-        class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]"
-        placeholder="Estrategia, cooperativo, familiar..." />
+      <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.boardGame.type' | transloco
+        }}</label>
+      <input type="text" [(ngModel)]="form.type" [placeholder]="'admin.boardGame.typePlaceholder' | transloco"
+        class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]" />
     </div>
     }
 
-    <!-- Campos VideoGame -->
     @if (isVideoGame) {
     <hr class="border-[var(--color-border)]" />
-    <p class="text-sm font-bold text-[var(--color-text)]">Datos del videojuego</p>
+    <p class="text-sm font-bold text-[var(--color-text)]">{{ 'admin.videoGame.title' | transloco }}</p>
     <div>
-      <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Plataforma</label>
-      <input type="text" [(ngModel)]="form.platform"
-        class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]"
-        placeholder="PS5, Xbox, PC..." />
+      <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.videoGame.platform' | transloco
+        }}</label>
+      <select [(ngModel)]="form.platform"
+        class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]">
+        <option value="">{{ 'admin.videoGame.selectPlatform' | transloco }}</option>
+        <option value="PS5">PS5</option>
+        <option value="PS4">PS4</option>
+        <option value="Xbox Series X">Xbox Series X</option>
+        <option value="Xbox One">Xbox One</option>
+        <option value="PC">PC</option>
+        <option value="Nintendo Switch">Nintendo Switch</option>
+        <option value="Multiplataforma">{{ 'admin.videoGame.multiplatform' | transloco }}</option>
+      </select>
     </div>
     <div>
-      <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Desarrollador</label>
+      <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.videoGame.developer' | transloco
+        }}</label>
       <input type="text" [(ngModel)]="form.developer"
         class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]" />
     </div>
     <div>
-      <label class="block text-sm font-medium text-[var(--color-text)] mb-1">PEGI</label>
-      <input type="number" [(ngModel)]="form.pegi" min="0"
-        class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]" />
+      <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.videoGame.pegi' | transloco
+        }}</label>
+      <select [(ngModel)]="form.pegi"
+        class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]">
+        <option [ngValue]="null">{{ 'admin.videoGame.selectPegi' | transloco }}</option>
+        <option [ngValue]="3">PEGI 3</option>
+        <option [ngValue]="7">PEGI 7</option>
+        <option [ngValue]="12">PEGI 12</option>
+        <option [ngValue]="16">PEGI 16</option>
+        <option [ngValue]="18">PEGI 18</option>
+      </select>
     </div>
     }
 
-    <!-- Campos Book -->
     @if (isBook) {
     <hr class="border-[var(--color-border)]" />
-    <p class="text-sm font-bold text-[var(--color-text)]">Datos del libro</p>
+    <p class="text-sm font-bold text-[var(--color-text)]">{{ 'admin.book.title' | transloco }}</p>
     <div class="grid grid-cols-2 gap-4">
       <div>
-        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Autor</label>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.book.author' | transloco
+          }}</label>
         <input type="text" [(ngModel)]="form.author"
           class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]" />
       </div>
       <div>
-        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Editorial</label>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.book.publisher' | transloco
+          }}</label>
         <input type="text" [(ngModel)]="form.publisher"
           class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]" />
       </div>
       <div>
-        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">ISBN</label>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.book.isbn' | transloco
+          }}</label>
         <input type="text" [(ngModel)]="form.isbn"
           class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]" />
       </div>
       <div>
-        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Páginas</label>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.book.pages' | transloco
+          }}</label>
         <input type="number" [(ngModel)]="form.pages" min="0"
           class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]" />
       </div>
     </div>
     <div>
-      <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Idioma</label>
-      <input type="text" [(ngModel)]="form.language"
-        class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]"
-        placeholder="Español, Inglés..." />
+      <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.book.language' | transloco
+        }}</label>
+      <select [(ngModel)]="form.language"
+        class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]">
+        <option value="">{{ 'admin.book.selectLanguage' | transloco }}</option>
+        <option value="Español">Español</option>
+        <option value="Inglés">Inglés</option>
+        <option value="Francés">Francés</option>
+        <option value="Alemán">Alemán</option>
+        <option value="Italiano">Italiano</option>
+        <option value="Portugués">Portugués</option>
+        <option value="Japonés">Japonés</option>
+      </select>
     </div>
     }
 
-    <!-- Campos Collectible -->
     @if (isCollectible) {
     <hr class="border-[var(--color-border)]" />
-    <p class="text-sm font-bold text-[var(--color-text)]">Datos del coleccionable</p>
+    <p class="text-sm font-bold text-[var(--color-text)]">{{ 'admin.collectible.title' | transloco }}</p>
     <div class="grid grid-cols-2 gap-4">
       <div>
-        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Tipo</label>
-        <input type="text" [(ngModel)]="form.collectibleType"
-          class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]"
-          placeholder="Figura, póster, réplica..." />
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.collectible.type' | transloco
+          }}</label>
+        <select [(ngModel)]="form.collectibleType"
+          class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]">
+          <option value="">{{ 'admin.collectible.selectType' | transloco }}</option>
+          <option value="Figura">Figura</option>
+          <option value="Póster">Póster</option>
+          <option value="Réplica">Réplica</option>
+          <option value="Ropa">Ropa</option>
+          <option value="Accesorio">Accesorio</option>
+          <option value="Otro">Otro</option>
+        </select>
       </div>
       <div>
-        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Material</label>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.collectible.material' |
+          transloco }}</label>
         <input type="text" [(ngModel)]="form.material"
           class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]" />
       </div>
       <div>
-        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Talla / Tamaño</label>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.collectible.size' | transloco
+          }}</label>
         <input type="text" [(ngModel)]="form.size"
           class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]" />
       </div>
       <div>
-        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Referencia</label>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.collectible.reference' |
+          transloco }}</label>
         <input type="text" [(ngModel)]="form.reference"
-          class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]"
-          placeholder="Serie, película..." />
+          [placeholder]="'admin.collectible.referencePlaceholder' | transloco"
+          class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]" />
       </div>
     </div>
     <div class="flex items-center gap-2">
       <input type="checkbox" [(ngModel)]="form.limitedEdition" id="limitedEdition"
         class="w-4 h-4 accent-[var(--color-primary)]" />
-      <label for="limitedEdition" class="text-sm font-medium text-[var(--color-text)]">Edición limitada</label>
+      <label for="limitedEdition" class="text-sm font-medium text-[var(--color-text)] cursor-pointer">{{
+        'admin.collectible.limitedEdition' | transloco }}</label>
     </div>
     }
 
-    <!-- Campos Puzzle -->
     @if (isPuzzle) {
     <hr class="border-[var(--color-border)]" />
-    <p class="text-sm font-bold text-[var(--color-text)]">Datos del puzzle</p>
+    <p class="text-sm font-bold text-[var(--color-text)]">{{ 'admin.puzzle.title' | transloco }}</p>
     <div class="grid grid-cols-2 gap-4">
       <div>
-        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Número de piezas</label>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.puzzle.pieces' | transloco
+          }}</label>
         <input type="number" [(ngModel)]="form.pieces" min="0"
           class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]" />
       </div>
       <div>
-        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Dificultad</label>
-        <input type="text" [(ngModel)]="form.difficulty"
-          class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]"
-          placeholder="Fácil, media, difícil..." />
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.puzzle.difficulty' | transloco
+          }}</label>
+        <select [(ngModel)]="form.difficulty"
+          class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]">
+          <option value="">{{ 'admin.puzzle.selectDifficulty' | transloco }}</option>
+          <option value="Fácil">Fácil</option>
+          <option value="Media">Media</option>
+          <option value="Difícil">Difícil</option>
+          <option value="Experto">Experto</option>
+        </select>
       </div>
       <div>
-        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Forma</label>
-        <input type="text" [(ngModel)]="form.shape"
-          class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]"
-          placeholder="Rectangular, 3D..." />
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.puzzle.shape' | transloco
+          }}</label>
+        <select [(ngModel)]="form.shape"
+          class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]">
+          <option value="">{{ 'admin.puzzle.selectShape' | transloco }}</option>
+          <option value="Rectangular">Rectangular</option>
+          <option value="Circular">Circular</option>
+          <option value="Irregular">Irregular</option>
+          <option value="3D">3D</option>
+        </select>
       </div>
       <div>
-        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Edad mínima</label>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.puzzle.minAge' | transloco
+          }}</label>
         <input type="number" [(ngModel)]="form.minAge" min="0"
           class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]" />
       </div>
       <div>
-        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Creador</label>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.puzzle.creator' | transloco
+          }}</label>
         <input type="text" [(ngModel)]="form.creator"
           class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]" />
       </div>
       <div>
-        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">Dimensiones</label>
+        <label class="block text-sm font-medium text-[var(--color-text)] mb-1">{{ 'admin.puzzle.dimensions' | transloco
+          }}</label>
         <input type="text" [(ngModel)]="form.dimensions"
-          class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]"
-          placeholder="50x70cm..." />
+          [placeholder]="'admin.puzzle.dimensionsPlaceholder' | transloco"
+          class="w-full border border-[var(--color-border)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-primary)]" />
       </div>
     </div>
     }
 
-    <!-- Botones -->
+    <div class="flex items-center gap-2">
+      <input type="checkbox" [(ngModel)]="form.isRecommended" id="isRecommended"
+        class="w-4 h-4 accent-[var(--color-primary)]" />
+      <label for="isRecommended" class="text-sm font-medium text-[var(--color-text)] cursor-pointer">
+        {{ 'admin.recommended' | transloco }}
+      </label>
+    </div>
+
     <div class="flex gap-4 pt-2">
       <button (click)="submit()" [disabled]="loading || form.categoryId === 0"
-        class="flex-1 bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white py-3.5 rounded-xl font-semibold transition-colors disabled:opacity-50">
-        {{ loading ? 'Guardando...' : isEdit ? 'Guardar cambios' : 'Crear producto' }}
+        class="flex-1 bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white py-3.5 rounded-xl font-semibold transition-colors disabled:opacity-50 cursor-pointer">
+        {{ loading ? ('admin.saving' | transloco) : isEdit ? ('admin.save' | transloco) : ('admin.create' | transloco)
+        }}
       </button>
       <a routerLink="/catalog"
-        class="px-6 py-3.5 border border-[var(--color-border)] rounded-xl text-[var(--color-text-secondary)] hover:bg-[var(--color-bg)] transition-colors text-center font-medium">
-        Cancelar
+        class="px-6 py-3.5 border border-[var(--color-border)] rounded-xl text-[var(--color-text-secondary)] hover:bg-[var(--color-bg)] transition-colors text-center font-medium cursor-pointer">
+        {{ 'admin.cancel' | transloco }}
       </a>
     </div>
 

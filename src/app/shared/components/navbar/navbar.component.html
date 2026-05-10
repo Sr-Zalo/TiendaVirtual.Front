@@ -1,6 +1,7 @@
 <header class="sticky top-0 z-50">
   <!-- Barra principal -->
-  <div class="bg-white border-b border-[var(--color-border)] px-8 py-4 flex items-center gap-8">
+  <div style="background: var(--color-surface)"
+    class="border-b border-[var(--color-border)] px-8 py-4 flex items-center gap-8">
 
     <!-- Logo -->
     <a routerLink="/" class="flex-shrink-0 text-3xl font-bold tracking-tight">
@@ -10,10 +11,11 @@
     <!-- Barra de búsqueda -->
     <div class="flex-1 max-w-2xl mx-auto">
       <div
-        class="flex items-center border border-[var(--color-border)] rounded-full px-5 py-3 bg-white focus-within:border-[var(--color-primary)] transition-colors">
+        class="flex items-center border border-[var(--color-border)] rounded-full px-5 py-3 focus-within:border-[var(--color-primary)] transition-colors"
+        style="background: var(--color-surface)">
         <ph-magnifying-glass size="20" color="#9CA3AF" class="mr-3 flex-shrink-0"></ph-magnifying-glass>
         <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="search()"
-          placeholder="Buscar juegos, libros, coleccionables..."
+          [placeholder]="'navbar.search' | transloco"
           class="flex-1 outline-none text-base bg-transparent text-[var(--color-text)] placeholder-gray-400" />
       </div>
     </div>
@@ -24,7 +26,7 @@
       <a routerLink="/cart"
         class="flex items-center gap-2 text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors relative">
         <ph-shopping-cart size="28"></ph-shopping-cart>
-        <span class="text-base font-medium">Carrito</span>
+        <span class="text-base font-medium">{{ 'navbar.cart' | transloco }}</span>
         @if (cartCount > 0) {
         <span
           class="absolute -top-2 -right-2 bg-[var(--color-primary)] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
@@ -34,12 +36,12 @@
       </a>
       <a routerLink="/orders"
         class="text-base text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors">
-        Mis pedidos
+        {{ 'navbar.myOrders' | transloco }}
       </a>
       @if (authService.isAdmin()) {
       <a routerLink="/admin/product/new"
         class="text-base text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] transition-colors font-medium">
-        + Producto
+        {{ 'navbar.addProduct' | transloco }}
       </a>
       }
       <button (click)="logout()"
@@ -51,12 +53,12 @@
       <button (click)="openCart()"
         class="flex items-center gap-2 text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors">
         <ph-shopping-cart size="28"></ph-shopping-cart>
-        <span class="text-base font-medium">Carrito</span>
+        <span class="text-base font-medium">{{ 'navbar.cart' | transloco }}</span>
       </button>
       <button (click)="openLogin()"
         class="flex items-center gap-2 bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white px-5 py-2.5 rounded-full text-base font-medium transition-colors">
         <ph-user size="20" color="white"></ph-user>
-        Iniciar sesión
+        {{ 'navbar.login' | transloco }}
       </button>
       }
     </div>
@@ -68,7 +70,7 @@
       @for (link of navLinks; track link.label) {
       <a [routerLink]="link.path" [queryParams]="link.query"
         class="text-gray-300 hover:text-white text-xs font-semibold tracking-widest py-4 border-b-2 border-transparent hover:border-white transition-colors whitespace-nowrap">
-        {{ link.label }}
+        {{ link.translationKey | transloco }}
       </a>
       }
     </nav>

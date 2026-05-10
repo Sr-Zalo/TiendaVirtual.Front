@@ -78,6 +78,11 @@ export const routes: Routes = [
       import('./features/admin/product-form/product-form.page').then(m => m.ProductFormPage)
   },
   {
+    path: 'legal',
+    loadComponent: () =>
+      import('./features/legal/legal.page').then(m => m.LegalPage)
+  },
+  {
     path: '**',
     redirectTo: ''
   }
