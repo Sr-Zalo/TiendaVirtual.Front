@@ -1,4 +1,4 @@
 export const environment = {
-  production: false,
+  production: true,
   apiUrl: 'https://tiendavirtual-backend-6gkp.onrender.com'
 };
