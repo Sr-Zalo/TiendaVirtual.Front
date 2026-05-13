@@ -2,51 +2,6 @@
 <html lang="es">
 
 <head>
-  <script type="module">
-    import * as Ph from 'https://unpkg.com/@phosphor-icons/webcomponents@2.1.1/dist/index.js';
-
-    const icons = {
-      'ph-magnifying-glass': Ph.PhMagnifyingGlass,
-      'ph-shopping-cart': Ph.PhShoppingCart,
-      'ph-user': Ph.PhUser,
-      'ph-sign-out': Ph.PhSignOut,
-      'ph-star': Ph.PhStar,
-      'ph-fire': Ph.PhFire,
-      'ph-trend-up': Ph.PhTrendUp,
-      'ph-caret-left': Ph.PhCaretLeft,
-      'ph-caret-right': Ph.PhCaretRight,
-      'ph-game-controller': Ph.PhGameController,
-      'ph-television-simple': Ph.PhTelevisionSimple,
-      'ph-book-open': Ph.PhBookOpen,
-      'ph-puzzle-piece': Ph.PhPuzzlePiece,
-      'ph-tag': Ph.PhTag,
-      'ph-funnel': Ph.PhFunnel,
-      'ph-x': Ph.PhX,
-      'ph-arrow-left': Ph.PhArrowLeft,
-      'ph-trash': Ph.PhTrash,
-      'ph-users': Ph.PhUsers,
-      'ph-clock': Ph.PhClock,
-      'ph-globe': Ph.PhGlobe,
-      'ph-devices': Ph.PhDevices,
-      'ph-book': Ph.PhBook,
-      'ph-package': Ph.PhPackage,
-      'ph-check': Ph.PhCheck,
-      'ph-pencil': Ph.PhPencil,
-      'ph-sparkle': Ph.PhSparkle,
-      'ph-question': Ph.PhQuestion,
-      'ph-warning': Ph.PhWarning,
-      'ph-moon': Ph.PhMoon,
-      'ph-sun': Ph.PhSun,
-      'ph-dice-five': Ph.PhDiceFive,
-      'ph-gamepad': Ph.PhGamepad
-    };
-
-    for (const [name, constructor] of Object.entries(icons)) {
-      if (constructor && !customElements.get(name)) {
-        customElements.define(name, constructor);
-      }
-    }
-  </script>
   <meta charset="utf-8">
   <title>PlayVault</title>
   <base href="/">
@@ -56,6 +11,51 @@
 
 <body>
   <app-root></app-root>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const icons = {
+        'ph-magnifying-glass': 'PhMagnifyingGlass',
+        'ph-shopping-cart': 'PhShoppingCart',
+        'ph-user': 'PhUser',
+        'ph-sign-out': 'PhSignOut',
+        'ph-star': 'PhStar',
+        'ph-fire': 'PhFire',
+        'ph-trend-up': 'PhTrendUp',
+        'ph-caret-left': 'PhCaretLeft',
+        'ph-caret-right': 'PhCaretRight',
+        'ph-game-controller': 'PhGameController',
+        'ph-television-simple': 'PhTelevisionSimple',
+        'ph-book-open': 'PhBookOpen',
+        'ph-puzzle-piece': 'PhPuzzlePiece',
+        'ph-tag': 'PhTag',
+        'ph-funnel': 'PhFunnel',
+        'ph-x': 'PhX',
+        'ph-arrow-left': 'PhArrowLeft',
+        'ph-trash': 'PhTrash',
+        'ph-users': 'PhUsers',
+        'ph-clock': 'PhClock',
+        'ph-globe': 'PhGlobe',
+        'ph-devices': 'PhDevices',
+        'ph-book': 'PhBook',
+        'ph-package': 'PhPackage',
+        'ph-check': 'PhCheck',
+        'ph-pencil': 'PhPencil',
+        'ph-sparkle': 'PhSparkle',
+        'ph-question': 'PhQuestion',
+        'ph-warning': 'PhWarning',
+        'ph-moon': 'PhMoon',
+        'ph-sun': 'PhSun',
+        'ph-dice-five': 'PhDiceFive',
+        'ph-gamepad': 'PhGamepad'
+      };
+
+      for (const [name, className] of Object.entries(icons)) {
+        if (window[className] && !customElements.get(name)) {
+          customElements.define(name, window[className]);
+        }
+      }
+    });
+  </script>
 </body>
 
 </html>
