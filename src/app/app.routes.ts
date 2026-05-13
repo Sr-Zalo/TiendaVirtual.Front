@@ -28,11 +28,6 @@ export const routes: Routes = [
       import('./features/promociones/promociones.page').then(m => m.PromocionesPage)
   },
   {
-    path: 'recomendados',
-    loadComponent: () =>
-      import('./features/recomendados/recomendados.page').then(m => m.RecomendadosPage)
-  },
-  {
     path: 'product/:id',
     loadComponent: () =>
       import('./features/product-detail/product-detail.page').then(m => m.ProductDetailPage)

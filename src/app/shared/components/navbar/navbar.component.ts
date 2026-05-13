@@ -32,7 +32,6 @@ export class NavbarComponent implements OnInit {
     { label: 'NOVEDADES', translationKey: 'navbar.links.news', path: '/novedades', query: {} },
     { label: 'PRÓXIMAMENTE', translationKey: 'navbar.links.comingSoon', path: '/proximamente', query: {} },
     { label: 'PROMOCIONES', translationKey: 'navbar.links.promotions', path: '/promociones', query: {} },
-    { label: 'RECOMENDADOS', translationKey: 'navbar.links.recommended', path: '/recomendados', query: {} },
     { label: 'CATÁLOGO', translationKey: 'navbar.links.catalog', path: '/catalog', query: {} },
   ];
 

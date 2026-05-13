@@ -1,48 +1,42 @@
 <div class="min-h-screen bg-[var(--color-bg)]">
-    <div class="max-w-7xl mx-auto px-8 py-10">
+  <div class="max-w-7xl mx-auto px-8 py-16 flex flex-col items-center text-center">
 
-        <h1 class="text-4xl font-bold text-[var(--color-text)] mb-2">{{ 'proximamente.title' | transloco }}</h1>
-        <p class="text-[var(--color-text-secondary)] mb-10">{{ 'proximamente.subtitle' | transloco }}</p>
-
-        @if (loading) {
-        <div class="text-center py-20 text-[var(--color-text-secondary)]">{{ 'proximamente.loading' | transloco }}</div>
-        }
-
-        @if (!loading) {
-        @if (products.length === 0) {
-        <div class="text-center py-20 text-[var(--color-text-secondary)]">{{ 'proximamente.empty' | transloco }}</div>
-        } @else {
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            @for (product of products; track product.productId) {
-            <div class="rounded-2xl shadow-sm overflow-hidden relative" style="background: var(--color-surface)">
-                <div
-                    class="absolute top-3 left-3 z-10 bg-[var(--color-primary)] text-white text-xs px-3 py-1 rounded-full font-semibold">
-                    {{ 'proximamente.badge' | transloco }}
-                </div>
-                <a [routerLink]="['/product', product.productId]">
-                    <div class="h-52 flex items-center justify-center text-[var(--color-text-secondary)] text-sm"
-                        style="background: var(--color-bg)">
-                        Imagen del producto
-                    </div>
-                </a>
-                <div class="p-5">
-                    <span class="text-xs font-semibold text-[var(--color-primary)] uppercase">{{
-                        getCategoryKey(product.categoryName) | transloco }}</span>
-                    <a [routerLink]="['/product', product.productId]"
-                        class="block text-base font-semibold text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors mt-1 mb-2">
-                        {{ product.name }}
-                    </a>
-                    <p class="text-xl font-bold text-[var(--color-primary)] mb-4">{{ product.price }} €</p>
-                    <button disabled
-                        class="w-full bg-gray-200 text-gray-500 py-2.5 rounded-xl font-semibold text-sm cursor-not-allowed">
-                        {{ 'proximamente.unavailable' | transloco }}
-                    </button>
-                </div>
-            </div>
-            }
-        </div>
-        }
-        }
-
+    <!-- Icono principal -->
+    <div class="w-24 h-24 rounded-full bg-[var(--color-primary-light)] flex items-center justify-center mb-8">
+      <ph-sparkle size="48" color="var(--color-primary)" weight="fill"></ph-sparkle>
     </div>
+
+    <!-- Título -->
+    <h1 class="text-5xl font-bold text-[var(--color-text)] mb-4">{{ 'proximamente.title' | transloco }}</h1>
+    <p class="text-xl text-[var(--color-text-secondary)] mb-12 max-w-xl">{{ 'proximamente.subtitle' | transloco }}</p>
+
+    <!-- Separador -->
+    <div class="w-16 h-1 rounded-full bg-[var(--color-primary)] mb-12"></div>
+
+    <!-- Categorías que vienen -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 mb-16 w-full max-w-3xl">
+      @for (cat of categories; track cat.name) {
+        <div class="rounded-2xl p-6 flex flex-col items-center gap-3 hover:shadow-md transition-shadow"
+             style="background: var(--color-surface); border: 1px solid var(--color-border)">
+          <div class="w-14 h-14 rounded-full bg-[var(--color-primary-light)] flex items-center justify-center">
+            <ph-dice-five size="28" color="var(--color-primary)" *ngIf="cat.icon === 'ph-dice-five'"></ph-dice-five>
+            <ph-game-controller size="28" color="var(--color-primary)" *ngIf="cat.icon === 'ph-game-controller'"></ph-game-controller>
+            <ph-book-open size="28" color="var(--color-primary)" *ngIf="cat.icon === 'ph-book-open'"></ph-book-open>
+            <ph-star size="28" color="var(--color-primary)" *ngIf="cat.icon === 'ph-star'"></ph-star>
+            <ph-puzzle-piece size="28" color="var(--color-primary)" *ngIf="cat.icon === 'ph-puzzle-piece'"></ph-puzzle-piece>
+          </div>
+          <p class="text-sm font-semibold text-[var(--color-text)] text-center">{{ cat.name }}</p>
+        </div>
+      }
+    </div>
+
+    <!-- CTA -->
+    <p class="text-[var(--color-text-secondary)] mb-6">Mientras tanto, explora lo que ya tenemos disponible</p>
+    <a routerLink="/catalog"
+       class="inline-flex items-center gap-2 bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white px-8 py-4 rounded-full font-semibold text-lg transition-colors">
+      <ph-storefront size="22" color="white"></ph-storefront>
+      Ver catálogo
+    </a>
+
+  </div>
 </div>
