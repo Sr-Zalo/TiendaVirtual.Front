@@ -24,9 +24,14 @@
         <div class="rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition-shadow"
           style="background: var(--color-surface)">
           <a [routerLink]="['/product', product.productId]">
-            <div class="h-44 flex items-center justify-center text-[var(--color-text-secondary)] text-sm"
+            <div class="h-44 overflow-hidden flex items-center justify-center"
               style="background: var(--color-bg)">
-              Imagen
+              @if (product.images && product.images.length > 0) {
+              <img [src]="product.images[0].isMain ? product.images[0].url : product.images[0].url"
+                [alt]="product.name" class="w-full h-full object-cover" />
+              } @else {
+              <span class="text-xs text-[var(--color-text-secondary)]">Sin imagen</span>
+              }
             </div>
           </a>
           <div class="p-4">
@@ -36,7 +41,7 @@
             </a>
             <p class="text-base font-bold text-[var(--color-primary)] mb-3">{{ product.price }} €</p>
             <button (click)="openConfirm(product)" [disabled]="product.stock === 0"
-              class="w-full bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white py-2 rounded-xl font-semibold text-xs transition-colors disabled:opacity-50">
+              class="w-full bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white py-2 rounded-xl font-semibold text-xs transition-colors disabled:opacity-50 cursor-pointer">
               {{ product.stock === 0 ? ('novedades.outOfStock' | transloco) : ('novedades.addToCart' | transloco) }}
             </button>
           </div>
@@ -57,7 +62,7 @@
     <div class="flex items-start justify-between mb-4">
       <h3 class="text-lg font-bold text-[var(--color-text)]">{{ 'novedades.addToCartTitle' | transloco }}</h3>
       <button (click)="closeConfirm()"
-        class="text-[var(--color-text-secondary)] hover:text-[var(--color-text)] transition-colors">
+        class="text-[var(--color-text-secondary)] hover:text-[var(--color-text)] transition-colors cursor-pointer">
         <ph-x size="20"></ph-x>
       </button>
     </div>
@@ -65,16 +70,17 @@
     <div class="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl mb-4">{{ cartError }}</div>
     }
     <p class="text-[var(--color-text-secondary)] mb-6">
-      {{ 'novedades.addToCartConfirm' | transloco }} <span class="font-semibold text-[var(--color-text)]">{{
-        confirmProduct.name }}</span> {{ 'novedades.addToCartConfirm2' | transloco }}
+      {{ 'novedades.addToCartConfirm' | transloco }}
+      <span class="font-semibold text-[var(--color-text)]">{{ confirmProduct.name }}</span>
+      {{ 'novedades.addToCartConfirm2' | transloco }}
     </p>
     <div class="flex gap-3">
       <button (click)="closeConfirm()"
-        class="flex-1 border border-[var(--color-border)] text-[var(--color-text)] py-2.5 rounded-xl font-semibold text-sm hover:bg-[var(--color-bg)] transition-colors">
+        class="flex-1 border border-[var(--color-border)] text-[var(--color-text)] py-2.5 rounded-xl font-semibold text-sm hover:bg-[var(--color-bg)] transition-colors cursor-pointer">
         {{ 'novedades.cancel' | transloco }}
       </button>
       <button (click)="confirmAddToCart()"
-        class="flex-1 bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white py-2.5 rounded-xl font-semibold text-sm transition-colors">
+        class="flex-1 bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white py-2.5 rounded-xl font-semibold text-sm transition-colors cursor-pointer">
         {{ 'novedades.add' | transloco }}
       </button>
     </div>

@@ -5,6 +5,14 @@ import { TranslocoModule } from '@jsverse/transloco';
 import { ProductService } from '../../core/services/product.service';
 import { Product } from '../../core/models/product.model';
 
+interface Slide {
+  name: string;
+  description: string;
+  price: number;
+  id: number;
+  imageUrl: string | null;
+}
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -19,35 +27,58 @@ export class HomePage implements OnInit, OnDestroy {
   currentSlide = 0;
   private slideInterval: any;
 
-  slides = [
-    { name: 'Wingspan', description: 'Construye tu colección de aves', price: 54.99, id: 1 },
-    { name: 'Catan', description: 'El clásico juego de estrategia y negociación', price: 49.99, id: 2 },
-    { name: 'Gloomhaven', description: 'La aventura cooperativa más épica', price: 149.99, id: 3 }
-  ];
-
+  slides: Slide[] = [];
   featured: Product[] = [];
   newProducts: Product[] = [];
   bestsellers: Product[] = [];
 
+  getMainImage(product: Product): string | null {
+    if (!product.images?.length) return null;
+    return product.images.find(i => i.isMain)?.url ?? product.images[0].url;
+  }
+
   ngOnInit() {
     this.slideInterval = setInterval(() => {
-      this.currentSlide = (this.currentSlide + 1) % this.slides.length;
+      this.currentSlide = (this.currentSlide + 1) % (this.slides.length || 1);
+      this.cdr.detectChanges();
     }, 4000);
 
+    // Cargar los 3 productos del carrusel por ID real
+    const carouselIds = [2, 3, 4]; // Catan, Wingspan, Gloomhaven
+    const tempSlides: Slide[] = new Array(3);
+    let carouselLoaded = 0;
+
+    carouselIds.forEach((id, index) => {
+      this.productService.getById(id).subscribe({
+        next: product => {
+          tempSlides[index] = {
+            name: product.name,
+            description: product.description ?? '',
+            price: product.price,
+            id: product.productId,
+            imageUrl: this.getMainImage(product)
+          };
+          carouselLoaded++;
+          if (carouselLoaded === carouselIds.length) {
+            this.slides = tempSlides;
+            this.cdr.detectChanges();
+          }
+        },
+        error: () => { carouselLoaded++; }
+      });
+    });
+
+    // Cargar el resto de productos
     this.productService.getFiltered({}).subscribe({
       next: products => {
-        // Novedades: últimos 5 añadidos (mayor ProductId)
         this.newProducts = [...products]
           .sort((a, b) => b.productId - a.productId)
           .slice(0, 5);
 
-        // Más vendidos: los 5 primeros (simulado con los de menor ID, los más antiguos)
         this.bestsellers = [...products]
           .sort((a, b) => a.productId - b.productId)
-          .slice(0, 5)
-          .map((p, i) => ({ ...p, rank: i + 1 }));
+          .slice(0, 5);
 
-        // Destacados: 5 aleatorios
         const shuffled = [...products].sort(() => Math.random() - 0.5);
         this.featured = shuffled.slice(0, 5);
 

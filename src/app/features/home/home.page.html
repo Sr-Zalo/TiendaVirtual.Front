@@ -1,10 +1,14 @@
 <!-- HERO CARRUSEL -->
-<div class="relative w-full overflow-hidden" style="height: 420px; background: #3a3a3a;">
+<div class="relative w-full overflow-hidden" style="height: 420px; background: #1a1a2e;">
   @for (slide of slides; track slide.id; let i = $index) {
-    <div class="absolute inset-0 transition-opacity duration-700 flex items-center px-20"
+    <div class="absolute inset-0 transition-opacity duration-700 flex items-center"
          [style.opacity]="i === currentSlide ? '1' : '0'"
          [style.z-index]="i === currentSlide ? '1' : '0'">
-      <div class="max-w-xl">
+      @if (slide.imageUrl) {
+        <img [src]="slide.imageUrl" [alt]="slide.name"
+             class="absolute inset-0 w-full h-full object-cover opacity-30" />
+      }
+      <div class="relative z-10 px-20 max-w-xl">
         <h1 class="text-white text-6xl font-bold mb-4">{{ slide.name }}</h1>
         <p class="text-gray-300 text-xl mb-8">{{ slide.description }}</p>
         <div class="flex items-center gap-8">
@@ -42,8 +46,11 @@
           @for (item of featured; track item.productId) {
             <a [routerLink]="['/product', item.productId]"
                class="flex items-center gap-4 hover:bg-[var(--color-bg)] rounded-xl p-2.5 transition-colors">
-              <div class="w-16 h-16 bg-[var(--color-bg)] rounded-xl flex items-center justify-center text-[var(--color-text-secondary)] text-xs flex-shrink-0">
-                Img
+              <div class="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0"
+                   style="background: var(--color-bg)">
+                @if (getMainImage(item); as imgUrl) {
+                  <img [src]="imgUrl" [alt]="item.name" class="w-full h-full object-cover" />
+                }
               </div>
               <div>
                 <p class="text-sm font-medium text-[var(--color-text)]">{{ item.name }}</p>
@@ -65,8 +72,11 @@
           @for (item of newProducts; track item.productId) {
             <a [routerLink]="['/product', item.productId]"
                class="flex items-center gap-4 hover:bg-[var(--color-bg)] rounded-xl p-2.5 transition-colors">
-              <div class="w-16 h-16 bg-[var(--color-bg)] rounded-xl flex items-center justify-center text-[var(--color-text-secondary)] text-xs flex-shrink-0">
-                Img
+              <div class="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0"
+                   style="background: var(--color-bg)">
+                @if (getMainImage(item); as imgUrl) {
+                  <img [src]="imgUrl" [alt]="item.name" class="w-full h-full object-cover" />
+                }
               </div>
               <div>
                 <p class="text-sm font-medium text-[var(--color-text)]">{{ item.name }}</p>
@@ -88,8 +98,11 @@
           @for (item of bestsellers; track item.productId; let i = $index) {
             <a [routerLink]="['/product', item.productId]"
                class="flex items-center gap-4 hover:bg-[var(--color-bg)] rounded-xl p-2.5 transition-colors">
-              <div class="relative w-16 h-16 bg-[var(--color-bg)] rounded-xl flex items-center justify-center text-[var(--color-text-secondary)] text-xs flex-shrink-0">
-                Img
+              <div class="relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0"
+                   style="background: var(--color-bg)">
+                @if (getMainImage(item); as imgUrl) {
+                  <img [src]="imgUrl" [alt]="item.name" class="w-full h-full object-cover" />
+                }
                 <span class="absolute -top-1.5 -right-1.5 bg-[var(--color-text)] text-white text-xs px-1.5 py-0.5 rounded-full font-bold">
                   TOP {{ i + 1 }}
                 </span>

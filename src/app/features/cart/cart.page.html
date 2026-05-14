@@ -2,7 +2,7 @@
   <div class="max-w-7xl mx-auto px-8 py-10">
 
     <button (click)="goBack()"
-      class="flex items-center gap-2 text-[var(--color-primary)] hover:underline text-sm font-medium mb-6">
+      class="flex items-center gap-2 text-[var(--color-primary)] hover:underline text-sm font-medium mb-6 cursor-pointer">
       <ph-arrow-left size="18"></ph-arrow-left>
       {{ 'cart.back' | transloco }}
     </button>
@@ -32,10 +32,15 @@
           <div class="flex flex-col gap-4">
             @for (item of items; track item.cartId) {
             <div class="flex items-center gap-4 rounded-xl p-4" style="background: var(--color-bg)">
-              <div
-                class="w-20 h-20 rounded-xl flex items-center justify-center text-[var(--color-text-secondary)] text-xs flex-shrink-0 border border-[var(--color-border)]"
+              <div class="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 border border-[var(--color-border)]"
                 style="background: var(--color-surface)">
-                Img
+                @if (item.imageUrl) {
+                <img [src]="item.imageUrl" [alt]="item.productName" class="w-full h-full object-cover" />
+                } @else {
+                <div class="w-full h-full flex items-center justify-center">
+                  <ph-package size="24" color="var(--color-text-secondary)"></ph-package>
+                </div>
+                }
               </div>
               <div class="flex-1">
                 <p class="font-semibold text-[var(--color-text)] mb-1">{{ item.productName }}</p>
@@ -43,15 +48,15 @@
               </div>
               <div class="flex items-center gap-3">
                 <button (click)="decreaseQuantity(item)"
-                  class="w-9 h-9 rounded-xl border border-[var(--color-border)] flex items-center justify-center hover:border-[var(--color-primary)] transition-colors text-lg font-bold text-[var(--color-text)]"
+                  class="w-9 h-9 rounded-xl border border-[var(--color-border)] flex items-center justify-center hover:border-[var(--color-primary)] transition-colors text-lg font-bold text-[var(--color-text)] cursor-pointer"
                   style="background: var(--color-surface)">−</button>
                 <span class="w-8 text-center font-semibold text-[var(--color-text)]">{{ item.quantity }}</span>
                 <button (click)="increaseQuantity(item)"
-                  class="w-9 h-9 rounded-xl border border-[var(--color-border)] flex items-center justify-center hover:border-[var(--color-primary)] transition-colors text-lg font-bold text-[var(--color-text)]"
+                  class="w-9 h-9 rounded-xl border border-[var(--color-border)] flex items-center justify-center hover:border-[var(--color-primary)] transition-colors text-lg font-bold text-[var(--color-text)] cursor-pointer"
                   style="background: var(--color-surface)">+</button>
               </div>
               <button (click)="removeItem(item.cartId)"
-                class="flex items-center gap-1.5 text-sm text-[var(--color-text-secondary)] hover:text-red-500 transition-colors ml-2">
+                class="flex items-center gap-1.5 text-sm text-[var(--color-text-secondary)] hover:text-red-500 transition-colors ml-2 cursor-pointer">
                 <ph-trash size="18"></ph-trash>
                 {{ 'cart.delete' | transloco }}
               </button>
@@ -83,7 +88,7 @@
           }
           <div class="flex flex-col gap-3">
             <button (click)="checkout()" [disabled]="checkingOut"
-              class="w-full bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white py-3.5 rounded-xl font-semibold transition-colors disabled:opacity-50">
+              class="w-full bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white py-3.5 rounded-xl font-semibold transition-colors disabled:opacity-50 cursor-pointer">
               {{ checkingOut ? ('cart.processing' | transloco) : ('cart.checkout' | transloco) }}
             </button>
             <a routerLink="/catalog"

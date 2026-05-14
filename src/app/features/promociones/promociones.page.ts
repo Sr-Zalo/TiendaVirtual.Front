@@ -45,6 +45,7 @@ export class PromocionesPage implements OnInit {
     ngOnInit() {
         this.productService.getFiltered({ bestSellers: true }).subscribe({
             next: data => {
+                this.products = data.slice(0, 15);
                 this.products = data;
                 this.loading = false;
                 this.cdr.detectChanges();

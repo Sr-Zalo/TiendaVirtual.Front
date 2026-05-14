@@ -5,6 +5,7 @@ export interface CartItem {
   price: number;
   quantity: number;
   subtotal: number;
+   imageUrl?: string; 
 }
 
 export interface AddToCartRequest {
