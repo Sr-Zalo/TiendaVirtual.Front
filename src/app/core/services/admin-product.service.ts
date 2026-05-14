@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../environments/environment';
-import { Product } from '../models/product.model';
+import { Product, ProductImage } from '../models/product.model';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AdminProductService {
@@ -40,5 +41,17 @@ export class AdminProductService {
 
   updateSubtype(subtype: string, id: number, dto: any) {
     return this.api.put<void>(`${subtype}/${id}`, dto);
+  }
+
+  addImage(productId: number, url: string, isMain: boolean, altText?: string): Observable<ProductImage> {
+    return this.api.post<ProductImage>(`image/${productId}`, { url, isMain, altText });
+  }
+
+  deleteImage(imageId: number): Observable<void> {
+    return this.api.delete('image', imageId);
+  }
+
+  setMainImage(imageId: number): Observable<void> {
+    return this.api.put<void>(`image/${imageId}/main`, {});
   }
 }

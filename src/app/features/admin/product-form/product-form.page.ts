@@ -7,7 +7,9 @@ import { CategoryService } from '../../../core/services/category.service';
 import { ProductService } from '../../../core/services/product.service';
 import { AdminProductService } from '../../../core/services/admin-product.service';
 import { Category } from '../../../core/models/category.model';
+import { ProductImage } from '../../../core/models/product.model';
 import { TranslocoModule } from '@jsverse/transloco';
+import { environment } from '../../../core/environments/environment';
 
 @Component({
   selector: 'app-product-form',
@@ -31,6 +33,11 @@ export class ProductFormPage implements OnInit {
   error = '';
   isEdit = false;
   productId: number | null = null;
+
+  // --- IMÁGENES ---
+  images: ProductImage[] = [];
+  uploadingImage = false;
+  imageError = '';
 
   form = {
     categoryId: 0,
@@ -123,6 +130,7 @@ export class ProductFormPage implements OnInit {
         this.form.shape = product.shape ?? '';
         this.form.creator = product.creator ?? '';
         this.form.dimensions = product.dimensions ?? '';
+        this.images = product.images ?? [];   // ← cargar imágenes
         this.loadingProduct = false;
         this.cdr.detectChanges();
       },
@@ -133,6 +141,89 @@ export class ProductFormPage implements OnInit {
       }
     });
   }
+
+  // ---- MÉTODOS DE IMÁGENES ----
+
+  async uploadImage(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length || !this.productId) return;
+
+    const file = input.files[0];
+    input.value = ''; // reset para poder subir la misma imagen de nuevo si hace falta
+
+    if (this.images.length >= 4) {
+      this.imageError = 'Máximo 4 imágenes por producto';
+      return;
+    }
+
+    this.uploadingImage = true;
+    this.imageError = '';
+    this.cdr.detectChanges();
+
+    try {
+      // Subir a Cloudinary directamente con fetch (sin pasar por el auth interceptor)
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', environment.cloudinaryPreset);
+
+      const cloudRes = await fetch(
+        `https://api.cloudinary.com/v1_1/${environment.cloudName}/image/upload`,
+        { method: 'POST', body: formData }
+      );
+
+      if (!cloudRes.ok) throw new Error('Error al subir a Cloudinary');
+
+      const cloudData = await cloudRes.json();
+      const url: string = cloudData.secure_url;
+
+      // Guardar la URL en el backend
+      this.adminProductService.addImage(this.productId!, url, this.images.length === 0)
+        .subscribe({
+          next: (img) => {
+            this.images.push(img);
+            this.uploadingImage = false;
+            this.cdr.detectChanges();
+          },
+          error: () => {
+            this.imageError = 'Imagen subida a Cloudinary pero no se pudo guardar. Inténtalo de nuevo.';
+            this.uploadingImage = false;
+            this.cdr.detectChanges();
+          }
+        });
+    } catch {
+      this.imageError = 'Error al subir la imagen. Comprueba tu conexión.';
+      this.uploadingImage = false;
+      this.cdr.detectChanges();
+    }
+  }
+
+  deleteImage(imageId: number) {
+    this.adminProductService.deleteImage(imageId).subscribe({
+      next: () => {
+        this.images = this.images.filter(i => i.productImageId !== imageId);
+        // Si se borró la principal y quedan imágenes, la primera pasa a serlo
+        if (this.images.length > 0 && !this.images.some(i => i.isMain)) {
+          this.images[0].isMain = true;
+        }
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.imageError = 'Error al eliminar la imagen';
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  setMain(imageId: number) {
+    this.adminProductService.setMainImage(imageId).subscribe({
+      next: () => {
+        this.images.forEach(i => i.isMain = i.productImageId === imageId);
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  // ---- RESTO SIN CAMBIOS ----
 
   getEndpoint(): string {
     const name = this.selectedCategory?.name;
@@ -150,35 +241,22 @@ export class ProductFormPage implements OnInit {
       name: this.form.name,
       description: this.form.description,
       price: this.form.price,
-      stock: this.form.stock
+      stock: this.form.stock,
+      isRecommended: this.form.isRecommended
     };
-
     if (this.isBoardGame) return { ...base, minPlayers: this.form.minPlayers, maxPlayers: this.form.maxPlayers, avgDuration: this.form.avgDuration, minAge: this.form.minAge, type: this.form.type };
     if (this.isVideoGame) return { ...base, platform: this.form.platform, developer: this.form.developer, pegi: this.form.pegi };
     if (this.isBook) return { ...base, author: this.form.author, publisher: this.form.publisher, isbn: this.form.isbn, pages: this.form.pages, language: this.form.language };
     if (this.isCollectible) return { ...base, type: this.form.collectibleType, material: this.form.material, limitedEdition: this.form.limitedEdition, size: this.form.size, reference: this.form.reference };
     if (this.isPuzzle) return { ...base, pieces: this.form.pieces, difficulty: this.form.difficulty, shape: this.form.shape, material: this.form.material, minAge: this.form.minAge, creator: this.form.creator, dimensions: this.form.dimensions };
-
     return base;
   }
 
   submit() {
-    if (!this.form.name.trim()) {
-      this.error = 'El nombre es obligatorio';
-      return;
-    }
-    if (this.form.price <= 0) {
-      this.error = 'El precio debe ser mayor que 0';
-      return;
-    }
-    if (this.form.stock < 0) {
-      this.error = 'El stock no puede ser negativo';
-      return;
-    }
-    if (this.form.categoryId === 0) {
-      this.error = 'Selecciona una categoría';
-      return;
-    }
+    if (!this.form.name.trim()) { this.error = 'El nombre es obligatorio'; return; }
+    if (this.form.price <= 0) { this.error = 'El precio debe ser mayor que 0'; return; }
+    if (this.form.stock < 0) { this.error = 'El stock no puede ser negativo'; return; }
+    if (this.form.categoryId === 0) { this.error = 'Selecciona una categoría'; return; }
 
     this.loading = true;
     this.error = '';
@@ -186,35 +264,18 @@ export class ProductFormPage implements OnInit {
 
     if (this.isEdit && this.productId) {
       const endpoint = this.getEndpoint();
+      const obs = endpoint === 'product'
+        ? this.adminProductService.updateProduct(this.productId, dto)
+        : this.adminProductService.updateSubtype(endpoint, this.productId, dto);
 
-      if (endpoint === 'product') {
-        this.adminProductService.updateProduct(this.productId, dto).subscribe({
-          next: () => this.router.navigate(['/product', this.productId]),
-          error: () => {
-            this.error = 'Error al guardar los cambios';
-            this.loading = false;
-            this.cdr.detectChanges();
-          }
-        });
-      } else {
-        this.adminProductService.updateSubtype(endpoint, this.productId, dto).subscribe({
-          next: () => this.router.navigate(['/product', this.productId]),
-          error: () => {
-            this.error = 'Error al guardar los cambios';
-            this.loading = false;
-            this.cdr.detectChanges();
-          }
-        });
-      }
+      obs.subscribe({
+        next: () => this.router.navigate(['/product', this.productId]),
+        error: () => { this.error = 'Error al guardar los cambios'; this.loading = false; this.cdr.detectChanges(); }
+      });
     } else {
-      const endpoint = this.getEndpoint();
-      this.api.post<void>(endpoint, dto).subscribe({
+      this.api.post<void>(this.getEndpoint(), dto).subscribe({
         next: () => this.router.navigate(['/catalog']),
-        error: () => {
-          this.error = 'Error al crear el producto';
-          this.loading = false;
-          this.cdr.detectChanges();
-        }
+        error: () => { this.error = 'Error al crear el producto'; this.loading = false; this.cdr.detectChanges(); }
       });
     }
   }

@@ -298,6 +298,66 @@
       </label>
     </div>
 
+    @if (isEdit && productId) {
+    <hr class="border-[var(--color-border)]" />
+    <div>
+      <p class="text-sm font-bold text-[var(--color-text)] mb-1">
+        Imágenes ({{ images.length }}/4)
+      </p>
+      <p class="text-xs text-[var(--color-text-secondary)] mb-3">
+        La primera imagen subida será la principal. Pasa el ratón por encima para cambiarla o borrarla.
+      </p>
+
+      @if (imageError) {
+      <p class="text-xs text-red-500 mb-3">{{ imageError }}</p>
+      }
+
+      <div class="grid grid-cols-4 gap-3">
+        @for (img of images; track img.productImageId) {
+        <div class="relative group rounded-xl overflow-hidden aspect-square" style="background: var(--color-bg)">
+          <img [src]="img.url" [alt]="img.altText || img.productImageId" class="w-full h-full object-cover" />
+          @if (img.isMain) {
+          <span class="absolute top-1 left-1 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full"
+            style="background: var(--color-primary)">
+            Principal
+          </span>
+          }
+          <div
+            class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2"
+            style="background: rgba(0,0,0,0.55)">
+            @if (!img.isMain) {
+            <button (click)="setMain(img.productImageId)"
+              class="bg-white text-black text-[11px] font-medium px-3 py-1 rounded-lg w-24 cursor-pointer">
+              Hacer principal
+            </button>
+            }
+            <button (click)="deleteImage(img.productImageId)"
+              class="bg-red-500 text-white text-[11px] font-medium px-3 py-1 rounded-lg w-24 cursor-pointer">
+              Eliminar
+            </button>
+          </div>
+        </div>
+        }
+
+        @if (images.length < 4) { <label
+          class="rounded-xl aspect-square flex flex-col items-center justify-center border-2 border-dashed cursor-pointer transition-colors"
+          style="border-color: var(--color-border)" [class.opacity-50]="uploadingImage">
+          @if (uploadingImage) {
+          <div class="text-xs text-center" style="color: var(--color-text-secondary)">
+            Subiendo...
+          </div>
+          } @else {
+          <ph-plus size="28" color="var(--color-text-secondary)"></ph-plus>
+          <span class="text-xs mt-1" style="color: var(--color-text-secondary)">Añadir</span>
+          }
+          <input type="file" accept="image/jpeg,image/png,image/webp" (change)="uploadImage($event)" class="hidden"
+            [disabled]="uploadingImage" />
+          </label>
+          }
+      </div>
+    </div>
+    }
+
     <div class="flex gap-4 pt-2">
       <button (click)="submit()" [disabled]="loading || form.categoryId === 0"
         class="flex-1 bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white py-3.5 rounded-xl font-semibold transition-colors disabled:opacity-50 cursor-pointer">

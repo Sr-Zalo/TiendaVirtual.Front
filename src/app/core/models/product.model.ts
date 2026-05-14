@@ -39,6 +39,8 @@ export interface Product {
   shape?: string;
   creator?: string;
   dimensions?: string;
+
+  images?: ProductImage[];
 }
 
 export interface ProductFilterParams {
@@ -62,4 +64,12 @@ export interface ProductFilterParams {
   outOfStock?: boolean;
   newArrivals?: boolean;
   bestSellers?: boolean;
+}
+
+export interface ProductImage {
+  productImageId: number;
+  url: string;
+  altText?: string;
+  isMain: boolean;
+  order: number;
 }

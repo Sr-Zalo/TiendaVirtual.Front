@@ -36,7 +36,16 @@ export class ProductDetailPage implements OnInit {
   addedToCart = false;
   cartError = '';
   selectedImageIndex = 0;
-  mockImages = [1, 2, 3, 4];
+
+  get currentImage(): string | null {
+    if (!this.product?.images?.length) return null;
+    return this.product.images[this.selectedImageIndex]?.url
+      ?? this.product.images[0].url;
+  }
+
+  get hasMultipleImages(): boolean {
+    return (this.product?.images?.length ?? 0) > 1;
+  }
 
   get isAdmin() { return this.authService.isAdmin(); }
   get isBoardGame() { return this.product?.categoryName === 'Juego de mesa'; }

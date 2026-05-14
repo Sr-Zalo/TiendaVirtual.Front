@@ -20,20 +20,27 @@
     <div class="rounded-2xl shadow-sm p-8 flex gap-10" style="background: var(--color-surface)">
 
       <div class="w-96 flex-shrink-0">
-        <div class="rounded-2xl h-80 flex items-center justify-center text-[var(--color-text-secondary)] mb-4"
+        <div
+          class="rounded-2xl h-80 overflow-hidden flex items-center justify-center text-[var(--color-text-secondary)]"
           style="background: var(--color-bg)">
-          Imagen del producto
+          @if (currentImage) {
+          <img [src]="currentImage" [alt]="product?.name" class="w-full h-full object-cover" />
+          } @else {
+          <span class="text-sm">{{ 'product.noImage' | transloco }}</span>
+          }
         </div>
-        <div class="grid grid-cols-4 gap-2">
-          @for (img of mockImages; track img; let i = $index) {
-          <button (click)="selectedImageIndex = i"
-            class="rounded-xl h-20 flex items-center justify-center text-[var(--color-text-secondary)] text-xs transition-all"
+
+        @if (hasMultipleImages) {
+        <div class="grid grid-cols-4 gap-2 mt-4">
+          @for (img of product!.images!; track img.productImageId; let i = $index) {
+          <button (click)="selectedImageIndex = i" class="rounded-xl h-20 overflow-hidden transition-all cursor-pointer"
             style="background: var(--color-bg)" [class.ring-2]="selectedImageIndex === i"
-            [class.ring-[var(--color-primary)]]="selectedImageIndex === i">
-            {{ img }}
+            [style.--tw-ring-color]="'var(--color-primary)'">
+            <img [src]="img.url" [alt]="img.altText || ''" class="w-full h-full object-cover" />
           </button>
           }
         </div>
+        }
       </div>
 
       <div class="flex-1">

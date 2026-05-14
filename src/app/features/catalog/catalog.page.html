@@ -268,9 +268,13 @@
           }
 
           <a [routerLink]="['/product', product.productId]">
-            <div class="h-52 flex items-center justify-center text-[var(--color-text-secondary)] text-sm"
+            <div class="h-52 overflow-hidden flex items-center justify-center"
               style="background: var(--color-bg)">
-              Imagen del producto
+              @if (getMainImage(product); as imgUrl) {
+              <img [src]="imgUrl" [alt]="product.name" class="w-full h-full object-cover" />
+              } @else {
+              <span class="text-sm text-[var(--color-text-secondary)]">{{ 'catalog.noImage' | transloco }}</span>
+              }
             </div>
           </a>
 
@@ -311,8 +315,8 @@
           <ph-caret-left size="16"></ph-caret-left>
         </button>
         @for (page of pages; track page) {
-        @if (page === 1 || page === totalPages || (page >= currentPage - 2 && page <= currentPage + 2)) { <button
-          (click)="goToPage(page)"
+        @if (page === 1 || page === totalPages || (page >= currentPage - 2 && page <= currentPage + 2)) {
+        <button (click)="goToPage(page)"
           class="w-10 h-10 rounded-xl border text-sm font-semibold transition-colors cursor-pointer"
           [class.bg-[var(--color-primary)]]="page === currentPage" [class.text-white]="page === currentPage"
           [class.border-[var(--color-primary)]]="page === currentPage"
@@ -320,16 +324,16 @@
           [class.text-[var(--color-text)]]="page !== currentPage"
           [style.background]="page !== currentPage ? 'var(--color-surface)' : ''">
           {{ page }}
-          </button>
-          } @else if (page === currentPage - 3 || page === currentPage + 3) {
-          <span class="w-10 h-10 flex items-center justify-center text-[var(--color-text-secondary)]">...</span>
-          }
-          }
-          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages"
-            class="w-10 h-10 rounded-xl border border-[var(--color-border)] flex items-center justify-center hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-            style="background: var(--color-surface)">
-            <ph-caret-right size="16"></ph-caret-right>
-          </button>
+        </button>
+        } @else if (page === currentPage - 3 || page === currentPage + 3) {
+        <span class="w-10 h-10 flex items-center justify-center text-[var(--color-text-secondary)]">...</span>
+        }
+        }
+        <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages"
+          class="w-10 h-10 rounded-xl border border-[var(--color-border)] flex items-center justify-center hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+          style="background: var(--color-surface)">
+          <ph-caret-right size="16"></ph-caret-right>
+        </button>
       </div>
       }
       }

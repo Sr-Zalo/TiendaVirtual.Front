@@ -62,6 +62,11 @@ export class CatalogPage implements OnInit {
     return this.categoryKeys[name] ?? name;
   }
 
+  getMainImage(product: Product): string | null {
+    if (!product.images?.length) return null;
+    return product.images.find(i => i.isMain)?.url ?? product.images[0].url;
+  }
+
   get filterLabels(): Record<string, string> {
     return {
       'new': this.translocoService.translate('catalog.filterLabels.new'),
